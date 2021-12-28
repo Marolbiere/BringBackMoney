@@ -93,6 +93,19 @@ char get_char_moove() {
     return var_char;
 }
 
+void check_coins(char key, char carte[SIZE_X][SIZE_Y]) {
+    int var_x = 0;
+    int var_y = 0;
+    if(key=='z')     {  var_y = -1; }
+    else if(key=='s'){  var_y = 1 ; }
+    else if(key=='q'){  var_x = -1; }
+    else if(key=='d'){  var_x = 1 ; }
+
+    if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == 'O')
+                Joueur1.coins+=1;
+
+}
+
 void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
     char direction = get_char_moove();
     printf("direction choisie : %c",direction);
@@ -117,32 +130,28 @@ void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
     case 'z':
         if(Joueur1.pos_y != 0) {
             carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-            if(carte[Joueur1.pos_y - 1][Joueur1.pos_x] == 'O')
-                Joueur1.coins+=1;
+            check_coins(direction,carte);
             carte[Joueur1.pos_y - 1][Joueur1.pos_x] = 'J';
         }
         break;
     case 'q':
         if (Joueur1.pos_x != 0) {
             carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-            if(carte[Joueur1.pos_y][Joueur1.pos_x - 1] == 'O')
-                Joueur1.coins+=1;
+            check_coins(direction,carte);
             carte[Joueur1.pos_y][Joueur1.pos_x - 1] = 'J';
         }
         break;
     case 's':
         if (Joueur1.pos_y != SIZE_Y - 1) {
             carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-            if(carte[Joueur1.pos_y + 1][Joueur1.pos_x] == 'O')
-                Joueur1.coins+=1;
+            check_coins(direction,carte);
             carte[Joueur1.pos_y + 1][Joueur1.pos_x] = 'J';
         }
         break;
     case 'd':
         if (Joueur1.pos_x != SIZE_X - 1) {
             carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-            if(carte[Joueur1.pos_y][Joueur1.pos_x + 1] == 'O')
-                Joueur1.coins+=1;
+            check_coins(direction,carte);
             carte[Joueur1.pos_y][Joueur1.pos_x + 1] = 'J';
         }
         break;
@@ -159,8 +168,8 @@ int main() {
     char carte[SIZE_X][SIZE_Y]; //Déclaration du tableau stockant la carte du jeu
 
     system("cls");    
-
     printf("====Bring Back Money=====\n\n"); //titre
+
     init_carte(carte);
     init_player();
     affichage_carte(carte);
