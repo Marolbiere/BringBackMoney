@@ -3,7 +3,7 @@
 #include <time.h>
 #include <conio.h> 
 
-#include "Struct.h"
+#include "Struct.h" //Import du headerfiles struct
 
 #define SIZE_X 20
 #define SIZE_Y 20
@@ -25,8 +25,6 @@ void init_player() {
     Joueur1.life = 5;
 }
 
-
-
 void init_carte(char carte[SIZE_X][SIZE_Y]) { //fonction d'initialisation de carte
     int nb_random;
     int nb_piece, nb_obstacle, nb_trap, nb_coffre, nb_monstre;
@@ -46,12 +44,18 @@ void init_carte(char carte[SIZE_X][SIZE_Y]) { //fonction d'initialisation de car
         for (int j = 0; j < SIZE_X; j++) //coordonnées horizontale
         {
             nb_random = rand() % 20;
+
             if (nb_random == j && nb_piece != 0) {
                 carte[i][j] = 'O';
                 nb_piece-=1;
             }
-            else
-                carte[i][j] = ' ';
+            else if(nb_random == nb_obstacle) {
+                carte[i][j] = 'X';
+            }
+                else
+                    carte[i][j] = ' ';
+
+            
 
             if(j == SIZE_X - 1 && i == SIZE_Y - 1)
                 carte[i][j] = 'H';
@@ -106,6 +110,21 @@ void check_coins(char key, char carte[SIZE_X][SIZE_Y]) {
 
 }
 
+int check_obstacle(char key, char carte[SIZE_X][SIZE_Y]) {
+    int var_x = 0;
+    int var_y = 0;
+    if(key=='z')     {  var_y = -1; }
+    else if(key=='s'){  var_y = 1 ; }
+    else if(key=='q'){  var_x = -1; }
+    else if(key=='d'){  var_x = 1 ; }
+
+    if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == 'X')
+        return 1;
+    else
+        return 0;
+
+}
+
 void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
     char direction = get_char_moove();
     printf("direction choisie : %c",direction);
@@ -129,30 +148,38 @@ void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
     {
     case 'z':
         if(Joueur1.pos_y != 0) {
-            carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-            check_coins(direction,carte);
-            carte[Joueur1.pos_y - 1][Joueur1.pos_x] = 'J';
+            if(check_obstacle(direction, carte) == 0) {
+                carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
+                check_coins(direction,carte);
+                carte[Joueur1.pos_y - 1][Joueur1.pos_x] = 'J';
+            }
         }
         break;
     case 'q':
         if (Joueur1.pos_x != 0) {
-            carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-            check_coins(direction,carte);
-            carte[Joueur1.pos_y][Joueur1.pos_x - 1] = 'J';
+            if(check_obstacle(direction, carte) == 0) {
+                carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
+                check_coins(direction,carte);
+                carte[Joueur1.pos_y][Joueur1.pos_x - 1] = 'J';
+            }
         }
         break;
     case 's':
         if (Joueur1.pos_y != SIZE_Y - 1) {
-            carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-            check_coins(direction,carte);
-            carte[Joueur1.pos_y + 1][Joueur1.pos_x] = 'J';
+        if(check_obstacle(direction, carte) == 0) {
+                carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
+                check_coins(direction,carte);
+                carte[Joueur1.pos_y + 1][Joueur1.pos_x] = 'J';
+            }
         }
         break;
     case 'd':
         if (Joueur1.pos_x != SIZE_X - 1) {
-            carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-            check_coins(direction,carte);
-            carte[Joueur1.pos_y][Joueur1.pos_x + 1] = 'J';
+            if(check_obstacle(direction, carte) == 0) {
+                carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
+                check_coins(direction,carte);
+                carte[Joueur1.pos_y][Joueur1.pos_x + 1] = 'J';
+            }
         }
         break;
     }
@@ -162,8 +189,8 @@ void affichage_interface() {
     printf("Life : %d/5\n",Joueur1.life);
     printf("Money : %d\n",Joueur1.coins);
     printf("Time Before the end :\n");
-
 }
+
 int main() {
     char carte[SIZE_X][SIZE_Y]; //Déclaration du tableau stockant la carte du jeu
 
