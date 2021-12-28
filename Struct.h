@@ -6,7 +6,3 @@ struct Player { //Information du joueur
     int coins;
     int cabane_coins;
 };
-
-struct Monster { //Information d'un Monstre
-    int type;
-};
