@@ -162,7 +162,7 @@ void affichage_interface() {
     printf("Life : %d/5\n",Joueur1.life);
     printf("Money : %d\n",Joueur1.coins);
     printf("Time Before the end :\n");
-
+    
 }
 int main() {
     char carte[SIZE_X][SIZE_Y]; //Déclaration du tableau stockant la carte du jeu
