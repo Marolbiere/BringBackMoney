@@ -25,22 +25,39 @@ void init_player() {
     Joueur1.life = 5;
 }
 
+
+
 void init_carte(char carte[SIZE_X][SIZE_Y]) { //fonction d'initialisation de carte
     int nb_random;
+    int nb_piece, nb_obstacle, nb_trap, nb_coffre, nb_monstre;
+    
     srand(time(NULL));
+
+    nb_piece = rand() %SIZE_X;
+    nb_obstacle = rand() %SIZE_X/2;
+    nb_trap = rand() %SIZE_X/2;
+    nb_coffre = rand() %SIZE_X/4;
+    nb_monstre = rand() % SIZE_X/5;
+
+    printf("Nombre de pieces : %d\n", nb_piece);
 
     for (int i = 0; i < SIZE_Y; i++) //coordonnées verticale
     {
         for (int j = 0; j < SIZE_X; j++) //coordonnées horizontale
         {
             nb_random = rand() % 20;
-            if (nb_random == j)
+            if (nb_random == j && nb_piece != 0) {
                 carte[i][j] = 'O';
+                nb_piece-=1;
+            }
             else
                 carte[i][j] = ' ';
 
             if(j == SIZE_X - 1 && i == SIZE_Y - 1)
+                carte[i][j] = 'H';
+            if(j == SIZE_X - 2 && i == SIZE_Y - 1)
                 carte[i][j] = 'J';
+            
         }
     }
     printf("random number : %d\n", nb_random);
@@ -56,7 +73,6 @@ void bordures(int size_x) {
 
  void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
     
-    system("cls");
     bordures(SIZE_X);
      for (int i = 0; i < SIZE_Y; i++)
     {
@@ -140,7 +156,10 @@ void affichage_interface() {
 
 }
 int main() {
-    char carte[SIZE_X][SIZE_Y];
+    char carte[SIZE_X][SIZE_Y]; //Déclaration du tableau stockant la carte du jeu
+
+    system("cls");    
+
     printf("====Bring Back Money=====\n\n"); //titre
     init_carte(carte);
     init_player();
@@ -148,6 +167,8 @@ int main() {
     affichage_interface();
     while(1==1) {
         mouvement_player(carte);
+        system("cls");
+        printf("====Bring Back Money=====\n\n"); //titre
         affichage_carte(carte);
         affichage_interface();
         printf("\nPOSITION DU JOUEUR : pos_x = %d / pos_y = %d\n", Joueur1.pos_x, Joueur1.pos_y);

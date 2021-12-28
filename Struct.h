@@ -8,5 +8,5 @@ struct Player { //Information du joueur
 };
 
 struct Monster { //Information d'un Monstre
-
+    int type;
 };
