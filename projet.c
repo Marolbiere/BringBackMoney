@@ -33,12 +33,13 @@ void init_carte(char carte[SIZE_X][SIZE_Y]) { //fonction d'initialisation de car
 
     nb_piece = rand() %SIZE_X;
     nb_obstacle = rand() %SIZE_X/2;
-    nb_trap = rand() %SIZE_X/2;
-    nb_coffre = rand() %SIZE_X/4;
-    nb_monstre = rand() % SIZE_X/5;
+    //nb_trap = rand() %SIZE_X/2;
+    //nb_coffre = rand() %SIZE_X/4;
+    //nb_monstre = rand() % SIZE_X/5;
 
     printf("Nombre de pieces : %d\n", nb_piece);
 
+    //Génération de la carte procéduralement... (a tester en recursif !)
     for (int i = 0; i < SIZE_Y; i++) //coordonnées verticale
     {
         for (int j = 0; j < SIZE_X; j++) //coordonnées horizontale
@@ -49,13 +50,12 @@ void init_carte(char carte[SIZE_X][SIZE_Y]) { //fonction d'initialisation de car
                 carte[i][j] = 'O';
                 nb_piece-=1;
             }
-            else if(nb_random == nb_obstacle) {
+            else if(nb_random == j - 2 && nb_obstacle != 0) {
                 carte[i][j] = 'X';
+                nb_obstacle-=1;
             }
                 else
                     carte[i][j] = ' ';
-
-            
 
             if(j == SIZE_X - 1 && i == SIZE_Y - 1)
                 carte[i][j] = 'H';
@@ -78,10 +78,9 @@ void bordures(int size_x) {
  void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
     
     bordures(SIZE_X);
-     for (int i = 0; i < SIZE_Y; i++)
+    for (int i = 0; i < SIZE_Y; i++)
     {
-        for (int j = 0; j < SIZE_X; j++) 
-        {
+        for (int j = 0; j < SIZE_X; j++) {
             if (j == SIZE_X - 1)    printf("%c|\n", carte[i][j]);
             else if(j == 0)         printf("|%c", carte[i][j]);
             else                    printf("%c", carte[i][j]);
@@ -100,10 +99,10 @@ char get_char_moove() {
 void check_coins(char key, char carte[SIZE_X][SIZE_Y]) {
     int var_x = 0;
     int var_y = 0;
-    if(key=='z')     {  var_y = -1; }
-    else if(key=='s'){  var_y = 1 ; }
-    else if(key=='q'){  var_x = -1; }
-    else if(key=='d'){  var_x = 1 ; }
+    if(key=='z')     { var_y = -1; }
+    else if(key=='s'){ var_y =  1; }
+    else if(key=='q'){ var_x = -1; }
+    else if(key=='d'){ var_x =  1; }
 
     if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == 'O')
                 Joueur1.coins+=1;
