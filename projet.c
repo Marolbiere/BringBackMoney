@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include <ncurse.h>
+//#include <ncurse.h>
 #include <conio.h> 
 
 #include "Struct.h" //Import du headerfiles struct
@@ -44,7 +44,11 @@ void init_carte(char carte[SIZE_X][SIZE_Y]) { //fonction d'initialisation de car
     //Génération de la carte procéduralement... (a tester en recursif !)
     for (int i = 0; i < SIZE_Y; i++) //coordonnées verticale
     {
-        nb_random_y = rand() % 20;
+        if(nb_obstacle!=0)
+            nb_random_y = rand() % 20;
+
+        //A recheck les conditions pour l'appel des randoms
+
         for (int j = 0; j < SIZE_X; j++) //coordonnées horizontale
         {
             nb_random_x = rand() % 20;
@@ -68,6 +72,7 @@ void init_carte(char carte[SIZE_X][SIZE_Y]) { //fonction d'initialisation de car
         }
     }
     printf("random number : %d\n", nb_random_x);
+    printf("random number en y : %d\n",nb_random_y);
  }
 
 void bordures(int size_x) {
