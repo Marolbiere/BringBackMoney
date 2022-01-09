@@ -110,6 +110,9 @@ void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
             if(check_obstacle(direction, carte) == 0) {
                 carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
                 check_coins(direction,carte);
+
+                //Inclure le check cabane ! 
+
                 carte[Joueur1.pos_y - 1][Joueur1.pos_x] = 'J';
             }
         }
@@ -119,6 +122,9 @@ void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
             if(check_obstacle(direction, carte) == 0) {
                 carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
                 check_coins(direction,carte);
+
+                //Inclure le check cabane ! 
+
                 carte[Joueur1.pos_y][Joueur1.pos_x - 1] = 'J';
             }
         }
@@ -128,6 +134,9 @@ void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
         if(check_obstacle(direction, carte) == 0) {
                 carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
                 check_coins(direction,carte);
+
+                //Inclure le check cabane ! 
+
                 carte[Joueur1.pos_y + 1][Joueur1.pos_x] = 'J';
             }
         }
@@ -137,6 +146,9 @@ void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
             if(check_obstacle(direction, carte) == 0) {
                 carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
                 check_coins(direction,carte);
+
+                //Inclure le check cabane ! 
+
                 carte[Joueur1.pos_y][Joueur1.pos_x + 1] = 'J';
             }
         }
