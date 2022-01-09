@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include <time.h>
 //#include <ncurse.h>
-#include <conio.h> 
+//#include <conio.h> 
 
 #include "Struct.h" //Import du headerfiles struct
+#include "init_carte.h" //Import du headerfiles des init_carte
 
 #define SIZE_X 20
 #define SIZE_Y 20
@@ -25,55 +26,6 @@ void init_player() {
     //Création du joueur
     Joueur1.life = 5;
 }
-
-void init_carte(char carte[SIZE_X][SIZE_Y]) { //fonction d'initialisation de carte
-    int nb_random_x, nb_random_y;
-    int nb_piece, nb_obstacle, nb_trap, nb_coffre, nb_monstre;
-    
-    srand(time(NULL));
-
-    nb_piece = rand() %SIZE_X;
-    nb_obstacle = rand() %SIZE_X - 3; //modulo 17
-    //nb_trap = rand() %SIZE_X/2;
-    //nb_coffre = rand() %SIZE_X/4;
-    //nb_monstre = rand() % SIZE_X/5;
-
-    printf("Nombre de pieces : %d\n", nb_piece);
-    printf("Nombre d'obstacles : %d\n", nb_obstacle);
-
-    //Génération de la carte procéduralement... (a tester en recursif !)
-    for (int i = 0; i < SIZE_Y; i++) //coordonnées verticale
-    {
-        if(nb_obstacle!=0)
-            nb_random_y = rand() % 20;
-
-        //A recheck les conditions pour l'appel des randoms
-
-        for (int j = 0; j < SIZE_X; j++) //coordonnées horizontale
-        {
-            nb_random_x = rand() % 20;
-
-            if(i==nb_random_y && nb_obstacle != 0) {
-                carte[i][j] = 'X';
-                nb_obstacle-=1;
-            }
-            else if (nb_random_x == j && nb_piece != 0) {
-                carte[i][j] = 'O';
-                nb_piece-=1;
-            }
-                else
-                    carte[i][j] = ' ';
-
-            if(j == SIZE_X - 1 && i == SIZE_Y - 1)
-                carte[i][j] = 'H';
-            if(j == SIZE_X - 2 && i == SIZE_Y - 1)
-                carte[i][j] = 'J';
-            
-        }
-    }
-    printf("random number : %d\n", nb_random_x);
-    printf("random number en y : %d\n",nb_random_y);
- }
 
 void bordures(int size_x) {
     for (int a = 0; a < size_x + 2; a++) {
