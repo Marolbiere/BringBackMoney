@@ -1,6 +1,18 @@
 #include <curses.h>
 
-char getkey() {
+int main()
+{
+    initscr();
+    noecho();
+    cbreak();
+
+    int c;
+    while ((c=getch())!=27)
+        printw("%d ",c);
+    return 0;
+}
+
+/*char getkey() {
     char key;
     while(1) {
         key = getch();
@@ -9,10 +21,9 @@ char getkey() {
             return key;
         }
     }
-}
+}*/
 
-
-int main()
+/*int main()
 {
     //NCURSE START
     initscr();
@@ -43,4 +54,5 @@ int main()
             break;
         }
     }
-}
+}*/
+
