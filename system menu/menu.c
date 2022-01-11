@@ -11,12 +11,14 @@ char getkey() {
     }
 }
 
+
 int main()
 {
     //NCURSE START
     initscr();
     noecho();
     cbreak();
+
 
     while(1) {
         char touche = getkey();
