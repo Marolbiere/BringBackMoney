@@ -1,5 +1,16 @@
 #include <curses.h>
 
+char getkey() {
+    char key;
+    while(1) {
+        key = getch();
+        if(key == 'z' || key =='q' || key =='s' || key =='d')
+        {
+            return key;
+        }
+    }
+}
+
 int main()
 {
     //NCURSE START
@@ -7,14 +18,27 @@ int main()
     noecho();
     cbreak();
 
-    int yMax, xMax;
-    getmaxyx(stdscr,yMax,xMax);
-
-    WINDOW * menuwin = newwin(6, xMax-12,yMax-8, 5);
-    box(menuwin, 0,0);
-    refresh();
-    wrefresh(menuwin);
-
-    endwin();
-
+    while(1) {
+        char touche = getkey();
+        
+        switch (touche)
+        {
+        case 'z':
+            move(0,0);
+            printw("j'avance en z\n");
+            break;
+        case 'q':
+            move(0,0);
+            printw("j'avance en q\n");
+            break;
+        case 's':
+            move(0,0);
+            printw("j'avance en s\n");
+            break;
+        case 'd':
+            move(0,0);
+            printw("j'avance en d\n");
+            break;
+        }
+    }
 }
