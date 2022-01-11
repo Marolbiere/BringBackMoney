@@ -1,19 +1,16 @@
-Projet d'informatique pour Polytech Lille (2021 - 2022) SE2A3
+**Projet d'informatique pour Polytech Lille (2021 - 2022) SE2A3**
 
-==
+- Road Map : Curses_Integration
+    Jours à venir :
 
-//Road Map : Curses_Integration
+        Remplacer l'init.h pour nouveau terminal avec curses
 
-//Jours à venir :
+        Intégrer les déplacements dynamique avec curses
 
-//Remplacer l'init.h pour nouveau terminal avec curses
+        Programmer de façon événementiel
 
-//Intégrer les déplacements dynamique avec curses
+        fetch avec le develop
 
-//Programmer de façon événementiel
+        Refonte de l'init carte avec buissons !
 
-//fetch avec le develop
-
-//Refonte de l'init carte avec buissons !
-
-//Commencer le menu
+        Commencer le menu
