@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-//#include <ncurse.h>
+#include <curses.h>
 //#include <conio.h> 
 
 #define SIZE_X 20
@@ -24,7 +24,7 @@ void remplissage_obstacle(char carte[SIZE_X][SIZE_Y]){
     while(nb_random_y == 0) {nb_random_y = rand() % SIZE_X;    }
     while(nb_obstacle <= 4) {nb_obstacle = rand() %(SIZE_X-3); } //modulo 17
 
-    printf("Nombre d'obstacles : %d\n", nb_obstacle);
+    printw("Nombre d'obstacles : %d\n", nb_obstacle);
 
     for (int y = 0; y < SIZE_Y; y++)
     {
@@ -46,7 +46,7 @@ void remplissage_piece(char carte[SIZE_X][SIZE_Y]){
 
     while(nb_piece <= 10) { nb_piece = rand() %SIZE_X; }
 
-    printf("Nombre de pieces : %d\n", nb_piece);
+    printw("Nombre de pieces : %d\n", nb_piece);
 
     for (int y = 0; y < SIZE_Y; y++)
     {

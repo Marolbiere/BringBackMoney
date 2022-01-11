@@ -21,7 +21,6 @@
  
 struct Player Joueur1;
 
-
 void init_player() {
     //Création du joueur
     Joueur1.life = 5;
@@ -29,32 +28,32 @@ void init_player() {
 
 void bordures(int size_x) {
     for (int a = 0; a < size_x + 2; a++) {
-        if(a == 0)                printf("|");
-        else if (a == size_x + 1) printf("|\n");
-        else                      printf("-");
+        if(a == 0)                printw("|");
+        else if (a == size_x + 1) printw("|\n");
+        else                      printw("-");
     }
 }
 
- void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
+void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
     
     bordures(SIZE_X);
     for (int i = 0; i < SIZE_Y; i++)
     {
         for (int j = 0; j < SIZE_X; j++) {
-            if (j == SIZE_X - 1)    printf("%c|\n", carte[i][j]);
-            else if(j == 0)         printf("|%c", carte[i][j]);
-            else                    printf("%c", carte[i][j]);
+            if (j == SIZE_X - 1)    printw("%c|\n", carte[i][j]);
+            else if(j == 0)         printw("|%c", carte[i][j]);
+            else                    printw("%c", carte[i][j]);
         }
     }
     bordures(SIZE_X);
  }
  
-char get_char_moove() {
+/*char get_char_moove() {
     char var_char;
     printf("Quelle direction voulez vous allez ? (Z/Q/S/D)\n");
     scanf("%c",&var_char);
     return var_char;
-}
+}*/
 
 void check_coins(char key, char carte[SIZE_X][SIZE_Y]) {
     int var_x = 0;
@@ -84,9 +83,19 @@ int check_obstacle(char key, char carte[SIZE_X][SIZE_Y]) {
 
 }
 
+char getkey() {
+    char key;
+    while(1) {
+        key = getch();
+        if(key == 'z' || key =='q' || key =='s' || key =='d')
+        {
+            return key;
+        }
+    }
+}
+
 void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
-    char direction = get_char_moove();
-    printf("direction choisie : %c",direction);
+    char direction = getkey();
     //recherche des coordonnées du joueur
     for (int i = 0; i < SIZE_Y; i++)
     {
@@ -98,7 +107,6 @@ void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
                 Joueur1.pos_y = i;
                 //printf("\nTEST_BOUCLE : Coordonées du joueur trouvé !\n");
             }
-            
         }
     }
     //printf("\nTEST_FONCTION : Pos X : %d / Pos Y : %d\n",Joueur1.pos_x,Joueur1.pos_y);
@@ -157,29 +165,32 @@ void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
 }
 
 void affichage_interface() {
-    printf("Life : %d/5\n",Joueur1.life);
-    printf("Money : %d\n",Joueur1.coins);
-    printf("Time Before the end :\n");
+    printw("Life : %d/5\n",Joueur1.life);
+    printw("Money : %d\n",Joueur1.coins);
+    printw("Time Before the end :\n");
 }
 
-int main() {
+
+int main()  {
     char carte[SIZE_X][SIZE_Y]; //Déclaration du tableau stockant la carte du jeu
 
-    system("cls");    
-    printf("====Bring Back Money=====\n\n"); //titre
+    //init_curses
+    initscr();
+    noecho();
+    cbreak();
+    scrollok(stdscr, TRUE);
+    nodelay(stdscr, TRUE); //evite le retour chariot du getche
+    
+    init_carte(carte);  
 
-    init_carte(carte);
-    init_player();
-    affichage_carte(carte);
-    affichage_interface();
-    while(1==1) {
-        mouvement_player(carte);
-        system("cls");
-        printf("====Bring Back Money=====\n\n"); //titre
+    while(1) {
+        clear();
+        printw("====Bring Back Money=====\n\n"); //titre
         affichage_carte(carte);
-        affichage_interface();
-        printf("\nPOSITION DU JOUEUR : pos_x = %d / pos_y = %d\n", Joueur1.pos_x, Joueur1.pos_y);
+        affichage_interface(carte);
+        mouvement_player(carte);
+        
+        getch();
     }
-
-    return 0;
+    
 }

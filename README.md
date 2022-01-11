@@ -2,9 +2,9 @@
 
 - Road Map : Curses_Integration (Prochains jours)
 
-        Remplacer l'init.h pour nouveau terminal avec curses
+        Remplacer l'init.h pour nouveau terminal avec curses :white_check_mark:
 
-        Intégrer les déplacements dynamique avec curses
+        Intégrer les déplacements dynamique avec curses :white_check_mark:
 
         Programmer de façon événementiel
 
