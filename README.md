@@ -10,6 +10,8 @@
 
 - fetch avec le develop
 
-- Refonte de l'init carte avec buissons !
+- mettre en place l'interface cabane
+
+- Refonte de l'init carte avec buissons
 
 - Commencer le menu
