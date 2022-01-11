@@ -6,7 +6,7 @@
 
 - Intégrer les déplacements dynamique avec curses :white_check_mark:
 
-- Programmer de façon événementiel
+- Programmer de façon événementiel :white_check_mark:
 
 - fetch avec le develop
 
