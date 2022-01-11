@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include <curses.h>
 //#include <conio.h> 
 
 #include "Struct.h" //Import du headerfiles struct
