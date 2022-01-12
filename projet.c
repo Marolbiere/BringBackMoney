@@ -34,8 +34,7 @@ void bordures(int size_x) {
     }
 }
 
-void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
-    
+void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte   
     bordures(SIZE_X);
     for (int i = 0; i < SIZE_Y; i++)
     {
@@ -48,49 +47,38 @@ void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
     bordures(SIZE_X);
  }
  
-/*char get_char_moove() {
-    char var_char;
-    printf("Quelle direction voulez vous allez ? (Z/Q/S/D)\n");
-    scanf("%c",&var_char);
-    return var_char;
-}*/
 
-void check_coins(char key, char carte[SIZE_X][SIZE_Y]) {
+void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
     int var_x = 0;
     int var_y = 0;
-    if(key=='z')     { var_y = -1; }
-    else if(key=='s'){ var_y =  1; }
-    else if(key=='q'){ var_x = -1; }
-    else if(key=='d'){ var_x =  1; }
+    int var_i = 0;
+    switch (key) {
+        case 'z': 
+            if(Joueur1.pos_y != 0) {var_y = -1;}
+            break;
+        case 'q': 
+            if(Joueur1.pos_x != 0) {var_x = -1;}
+            break;
+        case 's':
+            if(Joueur1.pos_y != SIZE_Y - 1) {var_y = 1;}
+            break;
+        case 'd': if(Joueur1.pos_x != SIZE_X - 1) {var_x = 1;} 
+            break;
+        case 'i': var_i = 1;
+            break;
+    }
 
-    if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == 'O')
+    if(var_i==1) {
+        printw("J'interagis avec quelque chose\n");
+    }
+
+    if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] != 'X') {
+        if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == 'O')
                 Joueur1.coins+=1;
 
-}
-
-/*int check_obstacle(char key, char carte[SIZE_X][SIZE_Y]) {
-    int var_x = 0;
-    int var_y = 0;
-    if(key=='z')     {  var_y = -1; }
-    else if(key=='s'){  var_y = 1 ; }
-    else if(key=='q'){  var_x = -1; }
-    else if(key=='d'){  var_x = 1 ; }
-
-    if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == 'X')
-        return 1;
-    else
-        return 0;
-}*/
-
-char check_interaction(char key, char carte[SIZE_X][SIZE_Y]) {
-    int var_x = 0;
-    int var_y = 0;
-    if(key=='z')     {  var_y = -1; }
-    else if(key=='s'){  var_y = 1 ; }
-    else if(key=='q'){  var_x = -1; }
-    else if(key=='d'){  var_x = 1 ; }
-
-    return carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x];
+        carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
+        carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
+    }
 }
 
 char getkey() {
@@ -111,63 +99,13 @@ void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
     {
         for (int j = 0; j < SIZE_X; j++)
         {
-            //printf("\nTEST_BOUCLE : j = %d / i = %d\n", j,i);
             if(carte[i][j] == 'J') {
                 Joueur1.pos_x = j;
                 Joueur1.pos_y = i;
-                //printf("\nTEST_BOUCLE : Coordonées du joueur trouvé !\n");
             }
         }
     }
-    //printf("\nTEST_FONCTION : Pos X : %d / Pos Y : %d\n",Joueur1.pos_x,Joueur1.pos_y);
-
-    switch (direction)
-    {
-    case 'z':
-        if(Joueur1.pos_y != 0) {
-            if(check_interaction(direction, carte) != 'X') {
-                carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-                check_coins(direction,carte);
-                //Inclure le check cabane ! 
-                carte[Joueur1.pos_y - 1][Joueur1.pos_x] = 'J';
-            }
-        }
-        break;
-    case 'q':
-        if (Joueur1.pos_x != 0) {
-            if(check_interaction(direction, carte) != 'X') {
-                carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-                check_coins(direction,carte);
-                //Inclure le check cabane ! 
-                carte[Joueur1.pos_y][Joueur1.pos_x - 1] = 'J';
-            }
-        }
-        break;
-    case 's':
-        if (Joueur1.pos_y != SIZE_Y - 1) {
-        if(check_interaction(direction, carte) != 'X') {
-                carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-                check_coins(direction,carte);
-
-                //Inclure le check cabane ! 
-
-                carte[Joueur1.pos_y + 1][Joueur1.pos_x] = 'J';
-            }
-        }
-        break;
-    case 'd':
-        if (Joueur1.pos_x != SIZE_X - 1) {
-            if(check_interaction(direction, carte) != 'X') {
-                carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-                check_coins(direction,carte);
-
-                //Inclure le check cabane ! 
-
-                carte[Joueur1.pos_y][Joueur1.pos_x + 1] = 'J';
-            }
-        }
-        break;
-    }
+    interaction_environnement(direction, carte);
 }
 
 void affichage_interface() {
@@ -198,5 +136,7 @@ int main()  {
         
         getch();
     }
+
+
     
 }
