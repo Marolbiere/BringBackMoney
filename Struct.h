@@ -5,4 +5,5 @@ struct Player { //Information du joueur
     int pos_y;
     int coins;
     int cabane_coins;
+    int J_buissons;
 };
