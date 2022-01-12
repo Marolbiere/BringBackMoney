@@ -8,7 +8,7 @@
 
 - Programmer de façon événementiel :white_check_mark:
 
-- fetch avec le develop
+- fetch avec le develop :white_check_mark:
 
 - mettre en place l'interface cabane
 
