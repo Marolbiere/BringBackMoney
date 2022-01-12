@@ -12,6 +12,6 @@
 
 - mettre en place l'interface cabane
 
-- Refonte de l'init carte avec buissons
+- Refonte de l'init carte avec buissons :white_check_mark:
 
 - Commencer le menu
