@@ -42,13 +42,13 @@ void remplissage_buissons(char carte[SIZE_X][SIZE_Y]){
     int lg_buisson_x = 0;
     int lg_buisson_y = 0;
     int nb_random_y = 0;
+    int nb_random_x = 0;
     srand(time(NULL));
 
-    while(lg_buisson_x <= 2) {lg_buisson_x = rand() %6; }
+    while(lg_buisson_x <= 3) {lg_buisson_x = rand() %7; }
+    while(lg_buisson_y <= 3) {lg_buisson_y = rand() %7; }
     while(nb_random_y <= 0) {nb_random_y = rand() %SIZE_X-2; }
-    
-    while(lg_buisson_y <= 2) {lg_buisson_y = rand() %6; }
-    //lg_buisson_y = lg_buisson_x;
+    while(nb_random_x <= 0) {nb_random_x = rand() %SIZE_X-2; }
     int lg_buisson_x_init = lg_buisson_x;
 
     printw("Buisson : %dX%d\n", lg_buisson_x, lg_buisson_y);
@@ -56,7 +56,7 @@ void remplissage_buissons(char carte[SIZE_X][SIZE_Y]){
     for (int y = nb_random_y; y < SIZE_Y; y++)
     {
         lg_buisson_x = lg_buisson_x_init;
-        for (int x = 0; x < SIZE_X; x++)
+        for (int x = nb_random_x; x < SIZE_X; x++)
         {
             if(lg_buisson_y !=0 && lg_buisson_x != 0) {
                 carte[y][x] = 'G';
