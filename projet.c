@@ -24,6 +24,7 @@ struct Player Joueur1;
 void init_player() {
     //Création du joueur
     Joueur1.life = 5;
+    Joueur1.J_buissons = 0;
 }
 
 void bordures(int size_x) {
@@ -72,12 +73,41 @@ void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
         printw("J'interagis avec quelque chose\n");
     }
 
-    if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] != 'X') {
-        if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == 'O')
-                Joueur1.coins+=1;
-
+    switch (carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x])
+    {
+    case 'O': 
+        Joueur1.coins+=1;
         carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
         carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
+        break;
+    
+    case 'G':
+        if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == 'G' && Joueur1.J_buissons == 0) {
+            carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
+            carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
+            Joueur1.J_buissons = 1;
+        }
+        else if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == 'G' && Joueur1.J_buissons == 1) {
+            carte[Joueur1.pos_y][Joueur1.pos_x] = 'G';
+            carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
+            Joueur1.J_buissons = 1;
+        }
+        break;
+
+    case 'X':
+        break;
+    default:
+        if (Joueur1.J_buissons == 1 && carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == ' ') {
+            carte[Joueur1.pos_y][Joueur1.pos_x] = 'G';
+            carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
+            Joueur1.J_buissons = 0;
+        }
+        else {
+            Joueur1.J_buissons = 0;
+            carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
+            carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
+        }
+        break;
     }
 }
 
@@ -85,7 +115,7 @@ char getkey() {
     char key;
     while(1) {
         key = getch();
-        if(key == 'z' || key =='q' || key =='s' || key =='d')
+        if(key == 'z' || key =='q' || key =='s' || key =='d' || key =='i')
         {
             return key;
         }
