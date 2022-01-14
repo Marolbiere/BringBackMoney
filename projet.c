@@ -27,6 +27,15 @@ void init_player() {
     Joueur1.J_buissons = 0;
 }
 
+char get_char() {
+    char direction;
+    while(1) {
+        direction = getch();
+        if(direction == 'z' || direction == 'q' || direction == 's' || direction == 'd' || direction == 'i') 
+            return direction;
+    }
+}
+
 void bordures(int size_x) {
     for (int a = 0; a < size_x + 2; a++) {
         if(a == 0)                printw("|");
@@ -48,6 +57,12 @@ void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
     bordures(SIZE_X);
  }
  
+void interface_cabane(char carte[SIZE_X][SIZE_Y]) {
+    while(1) {
+        printw("Bienvenue dans l'interface cabane \n");
+        //getch();
+    }
+}
 
 void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
     int var_x = 0;
@@ -69,9 +84,6 @@ void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
             break;
     }
 
-    if(var_i==1) {
-        printw("J'interagis avec quelque chose\n");
-    }
 
     switch (carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x])
     {
@@ -94,6 +106,9 @@ void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
         }
         break;
 
+    case 'H':
+        interface_cabane(carte);
+        break;
     case 'X':
         break;
     default:
@@ -103,7 +118,6 @@ void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
             Joueur1.J_buissons = 0;
         }
         else {
-            Joueur1.J_buissons = 0;
             carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
             carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
         }
@@ -111,19 +125,8 @@ void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
     }
 }
 
-char getkey() {
-    char key;
-    while(1) {
-        key = getch();
-        if(key == 'z' || key =='q' || key =='s' || key =='d' || key =='i')
-        {
-            return key;
-        }
-    }
-}
-
 void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
-    char direction = getkey();
+    char direction = get_char();
     //recherche des coordonnées du joueur
     for (int i = 0; i < SIZE_Y; i++)
     {
@@ -146,23 +149,24 @@ void affichage_interface() {
 
 
 int main()  {
-    char carte[SIZE_X][SIZE_Y]; //Déclaration du tableau stockant la carte du jeu
+    char carte[SIZE_X][SIZE_Y];                  //Déclaration du tableau stockant la carte du jeu
 
-    //init_curses
+    //-----Initialisation du terminal Curses----//
     initscr();
     noecho();
     cbreak();
     scrollok(stdscr, TRUE);
     nodelay(stdscr, TRUE); //evite le retour chariot du getche
+    //------------------------------------------//
     
-    init_carte(carte);  
+    init_carte(carte);                           //Fonction d'initialisation de la carte (cf init_carte.h)
 
     while(1) {
-        clear();
+        clear();                                 //Clear le terminal
         printw("====Bring Back Money=====\n\n"); //titre
-        affichage_carte(carte);
-        affichage_interface(carte);
-        mouvement_player(carte);
+        affichage_carte(carte);                  //Fonction affichant la carte et ses bordures
+        affichage_interface(carte);              //Fonction affichant l'interface du joueur (Vie, pièces etc..)
+        mouvement_player(carte);                 //Fonction d'évenement pour voir ou se déplace le joueur
         
         getch();
     }
