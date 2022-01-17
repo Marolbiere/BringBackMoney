@@ -12,7 +12,13 @@
 
 - mettre en place l'interface cabane
 
+- Définir la structure player sans global
+
 - Refonte de l'init carte avec buissons :white_check_mark:
+
+- Développer les monstres et leur déplacement
+
+- Passer au temps avec time.h au lieu du tour par tour
 
 - Commencer le menu
 
