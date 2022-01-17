@@ -57,7 +57,7 @@ void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
     bordures(SIZE_X);
  }
  
-void interface_cabane(char carte[SIZE_X][SIZE_Y]) {
+void interface_cabane() {
     while(1) {
         printw("Bienvenue dans l'interface cabane \n");
         //getch();
@@ -67,7 +67,7 @@ void interface_cabane(char carte[SIZE_X][SIZE_Y]) {
 void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
     int var_x = 0;
     int var_y = 0;
-    int var_i = 0;
+    //int var_interaction = 0;
     switch (key) {
         case 'z': 
             if(Joueur1.pos_y != 0) {var_y = -1;}
@@ -80,8 +80,10 @@ void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
             break;
         case 'd': if(Joueur1.pos_x != SIZE_X - 1) {var_x = 1;} 
             break;
-        case 'i': var_i = 1;
-            break;
+        case 'i': 
+            if(carte[Joueur1.pos_y - 1][Joueur1.pos_x] == 'H' || carte[Joueur1.pos_y + 1][Joueur1.pos_x] == 'H' || carte[Joueur1.pos_y][Joueur1.pos_x - 1] == 'H' || carte[Joueur1.pos_y][Joueur1.pos_x + 1] == 'H') {
+                printw("Bonjour le monde\n");
+            }
     }
 
 
@@ -105,9 +107,7 @@ void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
             Joueur1.J_buissons = 1;
         }
         break;
-
     case 'H':
-        interface_cabane(carte);
         break;
     case 'X':
         break;
