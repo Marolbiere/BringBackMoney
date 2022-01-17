@@ -10,10 +10,6 @@
 
 - fetch avec le develop :white_check_mark:
 
-- mettre en place l'interface cabane
-
-- Définir la structure player sans global
-
 - Refonte de l'init carte avec buissons :white_check_mark:
 
 - Développer les monstres et leur déplacement
@@ -23,3 +19,12 @@
 - Commencer le menu
 
 - Créer le systeme de dossier pour delivrable
+
+* A faire séance du 18/01 : 
+
+- Définir la structure player sans global
+
+- Revérifier certains détails sur les buissons
+
+- - mettre en place l'interface cabane
+
