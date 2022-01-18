@@ -22,9 +22,9 @@
 
 ### A faire séance du 18/01 : 
 
-- Définir la structure player sans global
+- Définir la structure player sans global 
 
-- Revérifier certains détails sur les buissons
+- Revérifier certains détails sur les buissons :white_check_mark:
 
 - mettre en place l'interface cabane
 
