@@ -20,14 +20,6 @@
 //Herbe         G      De l’herbe qui permet de se cacher d’un monstre intelligent.
 
 
-void init_player(s_player *Joueur) {
-    //Création du joueur
-    Joueur->life = 5;
-    Joueur->J_buissons = 0;
-    Joueur->coins = 0;
-    Joueur->cabane_coins = 27;
-}
-
 char get_char() {
     char direction;
     while(1) {
@@ -66,7 +58,6 @@ void interface_cabane() {
 }
 
 void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
-    int temp_piece = 0;
     int var_x = 0;
     int var_y = 0;
     //int var_interaction = 0;
@@ -84,29 +75,41 @@ void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y], s_player *J
             break;
         case 'i': 
             if(carte[Joueur->pos_y - 1][Joueur->pos_x] == 'H' || carte[Joueur->pos_y + 1][Joueur->pos_x] == 'H' || carte[Joueur->pos_y][Joueur->pos_x - 1] == 'H' || carte[Joueur->pos_y][Joueur->pos_x + 1] == 'H') {
-                //clear();
-                while(1) {
-                    nodelay(stdscr, FALSE);
-                    move(13, 40);
-                    printw("Bienvenue dans votre interface cabane ! ");
-                    move(14, 40);
-                    printw("Voici vos pieces stocker : %d", Joueur->cabane_coins);
-                    move(15, 40);
-                    printw("Combien de pieces voulez vous mettre : ");
-                    move(16, 40);
-                    wscanw(stdscr,"%d", &temp_piece);
-                    if(Joueur->coins>0) {
-                        Joueur->coins-= temp_piece;
-                        Joueur->cabane_coins+= temp_piece;
-                    }
-                    else{
-                        move(17, 40);
-                        printw("Vous n'avez plus de pieces sur vous !");
+                int flag_interface = 0;
+                //int flag_depot = 0;
+                int temp_piece = 0;
+                char key;
+                clear();
+                while(flag_interface!=1) {
+                    nodelay(stdscr, TRUE); 
+                    mvprintw(10, 30,"Bienvenue dans votre interface cabane !");
+                    mvprintw(11, 30,"Vous avez actuellement %d pieces dans votre cabane.", Joueur->cabane_coins);
+                    mvprintw(13, 30,"Appuyez sur 'q' pour quitter la cabane.");
+                    mvprintw(14, 30,"Appuyez sur 'p' pour ajouter des pieces.");
+                    key = getch();
+                    switch (key)
+                    {
+                    case 'p':
+                        if((Joueur->coins)>0) {
+                            nodelay(stdscr, FALSE); 
+                            mvprintw(16, 30,"Combien de pieces voulez vous deposer ? :");
+                            wscanw(stdscr,"%d", &temp_piece);
+                            Joueur->cabane_coins += temp_piece;
+                            Joueur->coins -= temp_piece;
+                        }
+                        else {
+                            nodelay(stdscr, FALSE); 
+                            mvprintw(16, 30,"Malheuresement vous n'avez pas de pieces sur vous");
+                        }
+                        break;
+                    case 'q':
+                        flag_interface = 1;
+                        nodelay(stdscr, TRUE); 
+                        break;
                     }
                 }
             }
     }
-
 
     switch (carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x])
     {
