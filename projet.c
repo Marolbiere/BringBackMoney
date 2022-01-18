@@ -18,13 +18,14 @@
 //Piège         P      Caché au départ, il n’apparait pas sur la carte jusqu’à ce qu’il soit découvert. Les effets sont variables: (cf pdf).
 //Obstacle      X      Un obstacle qui empêche la bonne circulation du joueur.
 //Herbe         G      De l’herbe qui permet de se cacher d’un monstre intelligent.
- 
-struct Player Joueur1;
 
-void init_player() {
+
+void init_player(s_player *Joueur) {
     //Création du joueur
-    Joueur1.life = 5;
-    Joueur1.J_buissons = 0;
+    Joueur->life = 5;
+    Joueur->J_buissons = 0;
+    Joueur->coins = 0;
+    Joueur->cabane_coins = 27;
 }
 
 char get_char() {
@@ -64,47 +65,74 @@ void interface_cabane() {
     }
 }
 
-void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
+void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
+    int temp_piece = 0;
     int var_x = 0;
     int var_y = 0;
     //int var_interaction = 0;
     switch (key) {
         case 'z': 
-            if(Joueur1.pos_y != 0) {var_y = -1;}
+            if(Joueur->pos_y != 0) {var_y = -1;}
             break;
         case 'q': 
-            if(Joueur1.pos_x != 0) {var_x = -1;}
+            if(Joueur->pos_x != 0) {var_x = -1;}
             break;
         case 's':
-            if(Joueur1.pos_y != SIZE_Y - 1) {var_y = 1;}
+            if(Joueur->pos_y != SIZE_Y - 1) {var_y = 1;}
             break;
-        case 'd': if(Joueur1.pos_x != SIZE_X - 1) {var_x = 1;} 
+        case 'd': if(Joueur->pos_x != SIZE_X - 1) {var_x = 1;} 
             break;
         case 'i': 
-            if(carte[Joueur1.pos_y - 1][Joueur1.pos_x] == 'H' || carte[Joueur1.pos_y + 1][Joueur1.pos_x] == 'H' || carte[Joueur1.pos_y][Joueur1.pos_x - 1] == 'H' || carte[Joueur1.pos_y][Joueur1.pos_x + 1] == 'H') {
-                printw("Bonjour le monde\n");
+            if(carte[Joueur->pos_y - 1][Joueur->pos_x] == 'H' || carte[Joueur->pos_y + 1][Joueur->pos_x] == 'H' || carte[Joueur->pos_y][Joueur->pos_x - 1] == 'H' || carte[Joueur->pos_y][Joueur->pos_x + 1] == 'H') {
+                //clear();
+                while(1) {
+                    nodelay(stdscr, FALSE);
+                    move(13, 40);
+                    printw("Bienvenue dans votre interface cabane ! ");
+                    move(14, 40);
+                    printw("Voici vos pieces stocker : %d", Joueur->cabane_coins);
+                    move(15, 40);
+                    printw("Combien de pieces voulez vous mettre : ");
+                    move(16, 40);
+                    wscanw(stdscr,"%d", &temp_piece);
+                    if(Joueur->coins>0) {
+                        Joueur->coins-= temp_piece;
+                        Joueur->cabane_coins+= temp_piece;
+                    }
+                    else{
+                        move(17, 40);
+                        printw("Vous n'avez plus de pieces sur vous !");
+                    }
+                }
             }
     }
 
 
-    switch (carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x])
+    switch (carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x])
     {
-    case 'O': 
-        Joueur1.coins+=1;
-        carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-        carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
+    case 'O':
+        if (Joueur->J_buissons == 1 && carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] == 'O') {
+            carte[Joueur->pos_y][Joueur->pos_x] = 'G';
+            carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] = 'J';
+            Joueur->J_buissons = 0;
+        }
+        else {
+            Joueur->coins+=1;
+            carte[Joueur->pos_y][Joueur->pos_x] = ' ';
+            carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] = 'J';
+        }
         break;
     
     case 'G':
-        if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == 'G' && Joueur1.J_buissons == 0) {
-            carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-            carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
-            Joueur1.J_buissons = 1;
+        if(carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] == 'G' && Joueur->J_buissons == 0) {
+            carte[Joueur->pos_y][Joueur->pos_x] = ' ';
+            carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] = 'J';
+            Joueur->J_buissons = 1;
         }
-        else if(carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == 'G' && Joueur1.J_buissons == 1) {
-            carte[Joueur1.pos_y][Joueur1.pos_x] = 'G';
-            carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
-            Joueur1.J_buissons = 1;
+        else if(carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] == 'G' && Joueur->J_buissons == 1) {
+            carte[Joueur->pos_y][Joueur->pos_x] = 'G';
+            carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] = 'J';
+            Joueur->J_buissons = 1;
         }
         break;
     case 'H':
@@ -112,20 +140,20 @@ void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y]) {
     case 'X':
         break;
     default:
-        if (Joueur1.J_buissons == 1 && carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] == ' ') {
-            carte[Joueur1.pos_y][Joueur1.pos_x] = 'G';
-            carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
-            Joueur1.J_buissons = 0;
+        if (Joueur->J_buissons == 1 && carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] == ' ') {
+            carte[Joueur->pos_y][Joueur->pos_x] = 'G';
+            carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] = 'J';
+            Joueur->J_buissons = 0;
         }
         else {
-            carte[Joueur1.pos_y][Joueur1.pos_x] = ' ';
-            carte[Joueur1.pos_y + var_y][Joueur1.pos_x + var_x] = 'J';
+            carte[Joueur->pos_y][Joueur->pos_x] = ' ';
+            carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] = 'J';
         }
         break;
     }
 }
 
-void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
+void mouvement_player(char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
     char direction = get_char();
     //recherche des coordonnées du joueur
     for (int i = 0; i < SIZE_Y; i++)
@@ -133,17 +161,17 @@ void mouvement_player(char carte[SIZE_X][SIZE_Y]) {
         for (int j = 0; j < SIZE_X; j++)
         {
             if(carte[i][j] == 'J') {
-                Joueur1.pos_x = j;
-                Joueur1.pos_y = i;
+                Joueur->pos_x = j;
+                Joueur->pos_y = i;
             }
         }
     }
-    interaction_environnement(direction, carte);
+    interaction_environnement(direction, carte, Joueur);
 }
 
-void affichage_interface() {
-    printw("Life : %d/5\n",Joueur1.life);
-    printw("Money : %d\n",Joueur1.coins);
+void affichage_interface(s_player *Joueur) {
+    printw("Life : %d/5\n",Joueur->life);
+    printw("Money : %d\n",Joueur->coins);
     printw("Time Before the end :\n");
 }
 
@@ -159,14 +187,18 @@ int main()  {
     nodelay(stdscr, TRUE); //evite le retour chariot du getche
     //------------------------------------------//
     
+    struct Squelette_Player Joueur;
+
+    
     init_carte(carte);                           //Fonction d'initialisation de la carte (cf init_carte.h)
+    init_player(&Joueur);
 
     while(1) {
         clear();                                 //Clear le terminal
         printw("====Bring Back Money=====\n\n"); //titre
         affichage_carte(carte);                  //Fonction affichant la carte et ses bordures
-        affichage_interface(carte);              //Fonction affichant l'interface du joueur (Vie, pièces etc..)
-        mouvement_player(carte);                 //Fonction d'évenement pour voir ou se déplace le joueur
+        affichage_interface(&Joueur);              //Fonction affichant l'interface du joueur (Vie, pièces etc..)
+        mouvement_player(carte, &Joueur);                 //Fonction d'évenement pour voir ou se déplace le joueur
         
         getch();
     }
