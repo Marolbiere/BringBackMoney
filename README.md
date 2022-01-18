@@ -26,5 +26,5 @@
 
 - Revérifier certains détails sur les buissons
 
-- - mettre en place l'interface cabane
+- mettre en place l'interface cabane
 
