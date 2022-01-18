@@ -1,6 +1,6 @@
-**Projet d'informatique pour Polytech Lille (2021 - 2022) SE2A3**
+# Projet d'informatique pour Polytech Lille (2021 - 2022) SE2A3**
 
-* Road Map : Curses_Integration (Prochains jours)
+## Road Map : develop (Prochains jours)
 
 - Remplacer l'init.h pour nouveau terminal avec curses :white_check_mark:
 
@@ -20,7 +20,7 @@
 
 - Créer le systeme de dossier pour delivrable
 
-* A faire séance du 18/01 : 
+### A faire séance du 18/01 : 
 
 - Définir la structure player sans global
 
