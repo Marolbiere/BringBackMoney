@@ -1,4 +1,4 @@
-# Projet d'informatique pour Polytech Lille (2021 - 2022) SE2A3
+Cancel changes# Projet d'informatique pour Polytech Lille (2021 - 2022) SE2A3
 
 ## Road Map : develop (Prochains jours)
 
@@ -22,7 +22,7 @@
 
 ### A faire séance du 18/01 : 
 
-- Définir la structure player sans global 
+- Définir la structure player sans global ✅
 
 - Revérifier certains détails sur les buissons :white_check_mark:
 
