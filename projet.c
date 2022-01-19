@@ -9,6 +9,7 @@
 
 #define SIZE_X 20
 #define SIZE_Y 20
+#define RANDOMIZER_SEED srand(time(NULL))
 
 //Joueur        J      Le joueur qu’il faut déplacer sur la carte.
 //Pièce d’or    O      Les pièces à collecter (collecte automatique).
@@ -24,7 +25,7 @@ char get_char() {
     char direction;
     while(1) {
         direction = getch();
-        if(direction == 'z' || direction == 'q' || direction == 's' || direction == 'd' || direction == 'i') 
+        if(direction == 'z' || direction == 'q' || direction == 's' || direction == 'd' || direction == 'i' || direction == 'p') 
             return direction;
     }
 }
@@ -50,11 +51,57 @@ void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
     bordures(SIZE_X);
  }
  
-void interface_cabane() {
-    while(1) {
-        printw("Bienvenue dans l'interface cabane \n");
-        //getch();
-    }
+void interface_cabane(s_player *Joueur) {
+    int flag_interface = 0;
+                //int flag_depot = 0;
+                int temp_piece = 0;
+                char key;
+                clear();
+                while(flag_interface!=1) {
+                    clrtoeol();
+                    nodelay(stdscr, TRUE); 
+                    mvprintw(10, 30,"Bienvenue dans votre interface cabane !");
+                    mvprintw(11, 30,"Vous avez actuellement %d pieces sur vous", Joueur->coins);
+                    mvprintw(12, 30,"Vous avez actuellement %d pieces dans votre cabane.", Joueur->cabane_coins);
+                    mvprintw(14, 30,"Appuyez sur 'q' pour quitter la cabane.");
+                    mvprintw(15, 30,"Appuyez sur 'p' pour ajouter des pieces.");
+                    key = get_char();
+                    switch (key)
+                    {
+                    case 'p':   
+                        if((Joueur->coins)>0) {
+                            nodelay(stdscr, FALSE);
+
+                            mvprintw(17, 30,"Combien de pieces voulez vous deposer ? :");
+                            wscanw(stdscr,"%d", &temp_piece);
+                            if(temp_piece<=Joueur->coins) {
+                                Joueur->cabane_coins += temp_piece;
+                                Joueur->coins -= temp_piece;
+                            }
+                            else {
+                                mvprintw(17, 30,"Vous avez entree trop de pieces !"); 
+                            }
+                        }
+                        else {
+                            nodelay(stdscr, FALSE); 
+                            mvprintw(17, 30,"Malheuresement vous n'avez pas de pieces sur vous");
+                        }
+                        break;
+                    case 'q':
+                        flag_interface = 1;
+                        nodelay(stdscr, TRUE); 
+                        break;
+                    }
+                }
+}
+
+int verif_case(char carte[SIZE_Y][SIZE_X], s_player *Joueur, char caractere) {
+    if(carte[Joueur->pos_y - 1][Joueur->pos_x] == caractere || 
+       carte[Joueur->pos_y + 1][Joueur->pos_x] == caractere || 
+       carte[Joueur->pos_y][Joueur->pos_x - 1] == caractere || 
+       carte[Joueur->pos_y][Joueur->pos_x + 1] == caractere)
+            return 1;
+    else    return 0;
 }
 
 void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
@@ -74,47 +121,23 @@ void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y], s_player *J
         case 'd': if(Joueur->pos_x != SIZE_X - 1) {var_x = 1;} 
             break;
         case 'i': 
-            if(carte[Joueur->pos_y - 1][Joueur->pos_x] == 'H' || carte[Joueur->pos_y + 1][Joueur->pos_x] == 'H' || carte[Joueur->pos_y][Joueur->pos_x - 1] == 'H' || carte[Joueur->pos_y][Joueur->pos_x + 1] == 'H') {
-                int flag_interface = 0;
-                //int flag_depot = 0;
-                int temp_piece = 0;
-                char key;
-                clear();
-                while(flag_interface!=1) {
-                    nodelay(stdscr, TRUE); 
-                    mvprintw(10, 30,"Bienvenue dans votre interface cabane !");
-                    mvprintw(11, 30,"Vous avez actuellement %d pieces dans votre cabane.", Joueur->cabane_coins);
-                    mvprintw(13, 30,"Appuyez sur 'q' pour quitter la cabane.");
-                    mvprintw(14, 30,"Appuyez sur 'p' pour ajouter des pieces.");
-                    key = getch();
-                    switch (key)
-                    {
-                    case 'p':
-                        if((Joueur->coins)>0) {
-                            nodelay(stdscr, FALSE); 
-                            mvprintw(16, 30,"Combien de pieces voulez vous deposer ? :");
-                            wscanw(stdscr,"%d", &temp_piece);
-                            Joueur->cabane_coins += temp_piece;
-                            Joueur->coins -= temp_piece;
-                        }
-                        else {
-                            nodelay(stdscr, FALSE); 
-                            mvprintw(16, 30,"Malheuresement vous n'avez pas de pieces sur vous");
-                        }
-                        break;
-                    case 'q':
-                        flag_interface = 1;
-                        nodelay(stdscr, TRUE); 
-                        break;
-                    }
-                }
+            if(verif_case(carte,Joueur,'H') == 1) {
+                interface_cabane(Joueur);
+            }
+            if(verif_case(carte,Joueur,'C') == 1) {
+                //ouverture_coffre(Joueur);
+                RANDOMIZER_SEED;
+                int p_or_c = rand()%SIZE_X;
+                if(p_or_c %2 == 0) { Joueur->coins += 1;}
+                else               { Joueur->life -= 1; }
             }
     }
 
     switch (carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x])
     {
+    //Cases où on peut passer dessus
     case 'O':
-        if (Joueur->J_buissons == 1 && carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] == 'O') {
+        if (Joueur->J_buissons == 1) {
             carte[Joueur->pos_y][Joueur->pos_x] = 'G';
             carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] = 'J';
             Joueur->J_buissons = 0;
@@ -127,23 +150,25 @@ void interaction_environnement(char key, char carte[SIZE_X][SIZE_Y], s_player *J
         break;
     
     case 'G':
-        if(carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] == 'G' && Joueur->J_buissons == 0) {
+        if(Joueur->J_buissons == 0) {
             carte[Joueur->pos_y][Joueur->pos_x] = ' ';
             carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] = 'J';
             Joueur->J_buissons = 1;
         }
-        else if(carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] == 'G' && Joueur->J_buissons == 1) {
+        else{
             carte[Joueur->pos_y][Joueur->pos_x] = 'G';
             carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] = 'J';
             Joueur->J_buissons = 1;
         }
         break;
+    //Cases infranchissables (cabane,obstacle ou encore coffre)
+    case 'C':
     case 'H':
-        break;
     case 'X':
         break;
+    //Cases de bases (espaces)
     default:
-        if (Joueur->J_buissons == 1 && carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] == ' ') {
+        if (Joueur->J_buissons == 1) {
             carte[Joueur->pos_y][Joueur->pos_x] = 'G';
             carte[Joueur->pos_y + var_y][Joueur->pos_x + var_x] = 'J';
             Joueur->J_buissons = 0;
@@ -175,6 +200,7 @@ void mouvement_player(char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
 void affichage_interface(s_player *Joueur) {
     printw("Life : %d/5\n",Joueur->life);
     printw("Money : %d\n",Joueur->coins);
+    printw("Key : %d\n",Joueur->nb_key);
     printw("Time Before the end :\n");
 }
 
