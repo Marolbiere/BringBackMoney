@@ -1,6 +1,6 @@
 struct Squelette_Player { //Information du joueur
     int life;
-    int key;
+    int nb_key;
     int pos_x;
     int pos_y;
     int coins;
