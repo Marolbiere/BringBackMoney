@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <curses.h>
-//#include <conio.h> 
 
 #define SIZE_X 20
 #define SIZE_Y 20
@@ -92,31 +91,48 @@ void remplissage_piece(char carte[SIZE_X][SIZE_Y]){
     }    
 }
 
-void remplissage_coffre(char carte[SIZE_X][SIZE_Y]) {
+void remplissage_coffre_cle(char carte[SIZE_X][SIZE_Y]) {
     RANDOMIZER_SEED;
     int nb_random_x;
     int nb_coffre;
     RANDOMIZER_SEED;
 
     while(nb_coffre <= 1) { nb_coffre = rand() %SIZE_X / 6; }
-
+    int nb_key = nb_coffre;
     printw("Nombre de coffre : %d\n", nb_coffre);
 
-    for (int y = 0; y < SIZE_Y; y++)
-    {
-        for (int x = 0; x < SIZE_X; x++)
+    while(nb_coffre != 0) {
+        for (int y = 0; y < SIZE_Y; y++)
         {
-            nb_random_x = rand() % SIZE_X;
-            if (nb_random_x == x && nb_coffre != 0 && carte[y][x] != 'X' && carte[y][x] != 'G' && carte[y][x] != 'O') {
-                carte[y][x] = 'C';
-                nb_coffre-=1;
+            for (int x = 0; x < SIZE_X; x++)
+            {
+                nb_random_x = rand() % SIZE_X;
+                if (nb_random_x == x && nb_coffre != 0 && carte[y][x] != 'X' && carte[y][x] != 'G' && carte[y][x] != 'O') {
+                    carte[y][x] = 'C';
+                    nb_coffre-=1;
+                }
             }
         }
-    }    
+    }
+
+    while(nb_key!=0) {
+        for (int y = 0; y < SIZE_Y; y++)
+        {
+            for (int x = 0; x < SIZE_X; x++)
+            {
+                nb_random_x = rand() % SIZE_X;
+                if (nb_random_x == x && nb_key != 0 && carte[y][x] != 'X' && carte[y][x] != 'G' && carte[y][x] != 'O' && carte[y][x] != 'C') {
+                    carte[y][x] = 'K';
+                    nb_key-=1;
+                }
+            }
+        }
+    }
+
 }
 
 
-void placement_joueur_cabane(char carte[SIZE_X][SIZE_Y]) {
+void placement_joueur_cabane(char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
     RANDOMIZER_SEED;
     int nb_random_x = 0;
     int nb_random_y = 0;
@@ -126,15 +142,18 @@ void placement_joueur_cabane(char carte[SIZE_X][SIZE_Y]) {
         while(nb_random_y<= 2) {nb_random_y = rand() % SIZE_Y - 4;} // entre 2 et 16
         carte[nb_random_y][nb_random_x] = 'H';
         carte[nb_random_y][nb_random_x-1] = 'J';
+        Joueur->pos_x = nb_random_x-1;
+        Joueur->pos_y = nb_random_y;
+
         flag = 0;
     }
 }
 
-void init_carte(char carte[SIZE_X][SIZE_Y]) { //fonction d'initialisation de carte
+void init_carte(char carte[SIZE_X][SIZE_Y], s_player *Joueur) { //fonction d'initialisation de carte
     remplissage_espace(carte);
     remplissage_buissons(carte);
     remplissage_obstacle(carte);
     remplissage_piece(carte);
-    remplissage_coffre(carte);
-    placement_joueur_cabane(carte);
+    remplissage_coffre_cle(carte);
+    placement_joueur_cabane(carte, Joueur);
 }
