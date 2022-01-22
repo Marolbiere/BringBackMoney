@@ -1,6 +1,8 @@
 # Projet d'informatique pour Polytech Lille (2021 - 2022) SE2A3
 
-## Road Map : develop (Prochains jours)
+## Road Map :
+
+### A faire :
 
 - Finaliser l'apparation random de tout
 
@@ -13,7 +15,7 @@
 - Créer le systeme de dossier pour delivrable
 
 
-### Done
+### Finit :
 - Remplacer l'init.h pour nouveau terminal avec curses :white_check_mark:
 
 - Intégrer les déplacements dynamique avec curses :white_check_mark:
