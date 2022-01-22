@@ -41,7 +41,6 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         Joueur->pos_x = new_pos_x;
         Joueur->pos_y = new_pos_y;
         break;
-    //Cases infranchissables (cabane,obstacle ou encore coffre)
     case 'C':
         if(Joueur->nb_key>=1) {
             RANDOMIZER_SEED;
@@ -73,6 +72,24 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         interface_cabane(Joueur);
         break;
     case 'X':
+        break;
+    case 'P':
+        RANDOMIZER_SEED;
+        int random = rand()%SIZE_Y;
+        if(random<SIZE_X/2 && random > 0 && random == 4000) {
+            Joueur->life-=1;
+            carte[Joueur->pos_y][Joueur->pos_x] = ' ';
+            carte[new_pos_y][new_pos_x] = 'J';
+            Joueur->pos_x = new_pos_x;
+            Joueur->pos_y = new_pos_y;
+        }
+        else {
+            carte[Joueur->pos_y][Joueur->pos_x] = ' ';
+            carte[new_pos_y][new_pos_x] = ' ';
+            carte[Joueur->poscab_y][Joueur->poscab_x - 1] = 'J';
+            Joueur->pos_y = Joueur->poscab_y;
+            Joueur->pos_x = Joueur->poscab_x - 1;
+        }
         break;
     //Cases de bases (espaces)
     default:
