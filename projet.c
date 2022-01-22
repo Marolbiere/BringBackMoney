@@ -8,7 +8,7 @@ char get_char() { //Fonction global de relevé de caractère
     char direction;
     while(1) {
         direction = getch();
-        if(direction == 'z' || direction == 'q' || direction == 's' || direction == 'd' || direction == 'i' || direction == 'p') 
+        if(direction == 'z' || direction == 'q' || direction == 's' || direction == 'd' || direction == 'i' || direction == 'p' || direction =='e') 
             return direction;
     }
 }
@@ -65,5 +65,13 @@ int main()  {
         
         getch();
     }
+
+    //Message de loose
+    clear();
+    while(Joueur.life==0) {
+        mvprintw(14, 30,"Oh non tu as perdu bouhhhh !");
+        getch();
+    }
+
 
 }
