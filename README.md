@@ -4,6 +4,8 @@
 
 ### A faire :
 
+- Developper les pièges
+
 - Finaliser l'apparation random de tout
 
 - Développer les monstres et leur déplacement
