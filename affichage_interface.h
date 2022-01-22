@@ -21,9 +21,25 @@ void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
     for (int i = 0; i < SIZE_Y; i++)
     {
         for (int j = 0; j < SIZE_X; j++) {
-            if (j == SIZE_X - 1)    printw("%c|\n", carte[i][j]);
-            else if(j == 0)         printw("|%c", carte[i][j]);
-            else                    printw("%c", carte[i][j]);
+            
+            if (j == SIZE_X - 1) {
+                if(carte[i][j] == 'P')
+                    printw(" |\n");
+                else
+                    printw("%c|\n", carte[i][j]);
+            }
+            else if(j == 0)  {       
+                if(carte[i][j] == 'P')   
+                    printw("| ");
+                else
+                    printw("|%c", carte[i][j]);
+            }
+            else { 
+                if(carte[i][j] == 'P') 
+                    printw(" ");
+                else
+                    printw("%c", carte[i][j]);
+            }
         }
     }
     bordures(SIZE_X);
@@ -41,7 +57,7 @@ void interface_cabane(s_player *Joueur) {
         mvprintw(10, 30,"Bienvenue dans votre interface cabane !");
         mvprintw(11, 30,"Vous avez actuellement %d pieces sur vous", Joueur->coins);
         mvprintw(12, 30,"Vous avez actuellement %d pieces dans votre cabane.", Joueur->cabane_coins);
-        mvprintw(14, 30,"Appuyez sur 'q' pour quitter la cabane.");
+        mvprintw(14, 30,"Appuyez sur 'e' pour quitter la cabane.");
         mvprintw(15, 30,"Appuyez sur 'p' pour ajouter des pieces.");
         key = get_char();
         switch (key)
@@ -65,7 +81,7 @@ void interface_cabane(s_player *Joueur) {
                 mvprintw(17, 30,"Malheuresement vous n'avez pas de pieces sur vous");
             }
             break;
-        case 'q':
+        case 'e':
             flag_interface = 1;
             nodelay(stdscr, TRUE); 
             break;
