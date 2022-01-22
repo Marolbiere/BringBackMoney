@@ -13,7 +13,10 @@ typedef struct Squelette_Player s_player;
 void init_player(s_player *Joueur) {
     //Création du joueur
     Joueur->life = 5;
-    Joueur->J_buissons = 0;
+    Joueur->nb_key = 0;
     Joueur->coins = 0;
     Joueur->cabane_coins = 0;
+    Joueur->J_buissons = 0;
+    
+    
 }
