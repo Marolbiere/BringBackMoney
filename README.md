@@ -1,7 +1,19 @@
-Cancel changes# Projet d'informatique pour Polytech Lille (2021 - 2022) SE2A3
+# Projet d'informatique pour Polytech Lille (2021 - 2022) SE2A3
 
 ## Road Map : develop (Prochains jours)
 
+- Finaliser l'apparation random de tout
+
+- Développer les monstres et leur déplacement
+
+- Passer au temps avec time.h au lieu du tour par tour
+
+- Faire le menu (check ce qu'on peut faire avec curses)
+
+- Créer le systeme de dossier pour delivrable
+
+
+### Done
 - Remplacer l'init.h pour nouveau terminal avec curses :white_check_mark:
 
 - Intégrer les déplacements dynamique avec curses :white_check_mark:
@@ -13,18 +25,6 @@ Cancel changes# Projet d'informatique pour Polytech Lille (2021 - 2022) SE2A3
 - Refonte de l'init carte avec buissons :white_check_mark:
 
 - Faire spawner aléatoirement joueur et sa cabane :white_check_mark:
-
-- vérifier tous l'init_carte avec coffre clé etc...
-
-- Développer les monstres et leur déplacement
-
-- Passer au temps avec time.h au lieu du tour par tour
-
-- Commencer le menu
-
-- Créer le systeme de dossier pour delivrable
-
-### A faire séance du 18/01 : 
 
 - Définir la structure player sans global :white_check_mark:
 
