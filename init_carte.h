@@ -131,23 +131,53 @@ void remplissage_coffre_cle(char carte[SIZE_X][SIZE_Y]) {
 
 }
 
+void placement_piege(char carte[SIZE_X][SIZE_Y]) {
+    RANDOMIZER_SEED;
+    int nb_random_x;
+    int nb_piege;
+    RANDOMIZER_SEED;
+
+    while(nb_piege <= 2) { nb_piege = rand() %4; }
+
+    printw("Nombre de piege : %d\n", nb_piege);
+
+    while (nb_piege != 0) {
+        for (int y = 0; y < SIZE_Y; y++)
+        {
+            for (int x = 0; x < SIZE_X; x++)
+            {
+                nb_random_x = rand() % SIZE_X;
+                if (nb_random_x == x && nb_piege != 0 && carte[y][x] != 'X' && carte[y][x] != 'G' && carte[y][x] != 'C' && carte[y][x] != 'O' && carte[y][x] != 'K' && carte[y][x] != 'H') {
+                    carte[y][x] = 'P';
+                    nb_piege-=1;
+                }
+            }
+        }
+    }
+
+}
 
 void placement_joueur_cabane(char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
     RANDOMIZER_SEED;
     int nb_random_x = 0;
     int nb_random_y = 0;
     int flag = 1;
-    while(carte[nb_random_y][nb_random_x] == 'X' || carte[nb_random_y][nb_random_x] == 'O' || carte[nb_random_y][nb_random_x] == 'G' || carte[nb_random_y][nb_random_x] == 'C' || flag == 1) {
+    while(carte[nb_random_y][nb_random_x] == 'X' || carte[nb_random_y][nb_random_x] == 'O' || carte[nb_random_y][nb_random_x] == 'G' || carte[nb_random_y][nb_random_x] == 'C' || carte[nb_random_y][nb_random_x] == 'P'|| carte[nb_random_y][nb_random_x] == 'K'|| flag == 1) {
         while(nb_random_x<= 2) {nb_random_x = rand() % SIZE_X - 4;} // entre 2 et 16
         while(nb_random_y<= 2) {nb_random_y = rand() % SIZE_Y - 4;} // entre 2 et 16
         carte[nb_random_y][nb_random_x] = 'H';
         carte[nb_random_y][nb_random_x-1] = 'J';
         Joueur->pos_x = nb_random_x-1;
         Joueur->pos_y = nb_random_y;
+        Joueur->poscab_y = nb_random_y;
+        Joueur->poscab_x = nb_random_x;
 
         flag = 0;
     }
 }
+
+
+
 
 void init_carte(char carte[SIZE_X][SIZE_Y], s_player *Joueur) { //fonction d'initialisation de carte
     remplissage_espace(carte);
@@ -155,5 +185,6 @@ void init_carte(char carte[SIZE_X][SIZE_Y], s_player *Joueur) { //fonction d'ini
     remplissage_obstacle(carte);
     remplissage_piece(carte);
     remplissage_coffre_cle(carte);
+    placement_piege(carte);
     placement_joueur_cabane(carte, Joueur);
 }
