@@ -7,7 +7,6 @@
 #define SIZE_Y 20
 
 
-
 void bordures(int size_x) {
     for (int a = 0; a < size_x + 2; a++) {
         if(a == 0)                printw("|");
@@ -23,21 +22,21 @@ void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
         for (int j = 0; j < SIZE_X; j++) {
             
             if (j == SIZE_X - 1) {
-                if(carte[i][j] == 'P')
-                    printw(" |\n");
-                else
+                //if(carte[i][j] == 'P')
+                //    printw(" |\n");
+                //else
                     printw("%c|\n", carte[i][j]);
             }
             else if(j == 0)  {       
-                if(carte[i][j] == 'P')   
-                    printw("| ");
-                else
+                //if(carte[i][j] == 'P')   
+                //    printw("| ");
+                //else
                     printw("|%c", carte[i][j]);
             }
             else { 
-                if(carte[i][j] == 'P') 
-                    printw(" ");
-                else
+                //if(carte[i][j] == 'P') 
+                //    printw(" ");
+                //else
                     printw("%c", carte[i][j]);
             }
         }
