@@ -12,7 +12,7 @@ struct Squelette_Player { //Information du joueur
 
 struct Squelette_Monster { //information Monstre
     int pos_x;
-    int pox_y;
+    int pos_y;
     int type;
 };
 
@@ -26,7 +26,5 @@ void init_player(s_player *Joueur) {
     Joueur->nb_key = 0;
     Joueur->coins = 0;
     Joueur->cabane_coins = 0;
-    Joueur->J_buissons = 0;
-    
-    
+    Joueur->J_buissons = 0;  
 }
