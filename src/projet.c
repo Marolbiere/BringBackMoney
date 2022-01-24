@@ -2,15 +2,24 @@
 #include <stdio.h>
 #include <time.h>
 #include <curses.h>
-//#include <conio.h> 
+#include <ctype.h>
 
 char get_char() { //Fonction global de relevé de caractère
     char direction;
     while(1) {
-        direction = getch();
+        direction = tolower(getch());
         if(direction == 'z' || direction == 'q' || direction == 's' || direction == 'd' || direction == 'i' || direction == 'p' || direction =='e') 
             return direction;
     }
+}
+
+#define MAX_MONSTER 5
+#define SIZE_X 20
+#define SIZE_Y 20
+#define RANDOMIZER_SEED srand(time(NULL))
+
+char alea(int min, int max) {
+    return rand()%(max + 1 - min) + min;
 }
 
 #include "../include/Struct.h" //Import du headerfiles struct
@@ -18,9 +27,6 @@ char get_char() { //Fonction global de relevé de caractère
 #include "../include/affichage_interface.h" //Import des fonction gérant les interface et l'affichage
 #include "../include/interaction.h" //Import des fonctions d'interactions et de mouvement
 
-#define SIZE_X 20
-#define SIZE_Y 20
-#define RANDOMIZER_SEED srand(time(NULL))
 
 //Joueur        J      Le joueur qu’il faut déplacer sur la carte.
 //Pièce d’or    O      Les pièces à collecter (collecte automatique).
@@ -41,27 +47,31 @@ int verif_case(char carte[SIZE_Y][SIZE_X], s_player *Joueur, char caractere) {
 }
 
 int main()  {
-    char carte[SIZE_X][SIZE_Y];                  //Déclaration du tableau stockant la carte du jeu
+    char carte[SIZE_X][SIZE_Y]; //Déclaration du tableau stockant la carte du jeu
 
     //-----Initialisation du terminal Curses----//
     initscr();
     noecho();
     cbreak();
     scrollok(stdscr, TRUE);
-    nodelay(stdscr, TRUE); //evite le retour chariot du getche
+    nodelay(stdscr, TRUE); //evite le retour chariot du getch
     //------------------------------------------//
-    
-    struct Squelette_Player Joueur;
-               
+
+    //---Initialisation des Monstre et du Joueur---//
+    s_monster TabMonstre[MAX_MONSTER];
+    s_player Joueur;
+    //---------------------------------------------//        
+
     init_player(&Joueur);
-    init_carte(carte, &Joueur); //Fonction d'initialisation de la carte (cf init_carte.h)
+    init_carte(carte, &Joueur, TabMonstre); //Fonction d'initialisation de la carte (cf init_carte.h)
 
     while(Joueur.life!=0) {
         clear();                                 //Clear le terminal
         printw("====Bring Back Money=====\n\n"); //titre
         affichage_carte(carte);                  //Fonction affichant la carte et ses bordures
-        interface_joueur(&Joueur);              //Fonction affichant l'interface du joueur (Vie, pièces etc..)
-        input_player(carte, &Joueur);                 //Fonction d'évenement pour voir ou se déplace le joueur
+        interface_joueur(&Joueur);               //Fonction affichant l'interface du joueur (Vie, pièces etc..)
+        input_player(carte, &Joueur);            //Fonction d'évenement pour voir ou se déplace le joueur
+        Type_Monstre(carte, TabMonstre, 3);
         
         getch();
     }
@@ -69,9 +79,7 @@ int main()  {
     //Message de loose
     clear();
     while(Joueur.life==0) {
-        mvprintw(14, 30,"Oh non tu as perdu bouhhhh !");
+        mvprintw(14, 30,"Oh non t'es mové");
         getch();
     }
-
-
 }
