@@ -3,10 +3,29 @@
 #include <time.h>
 #include <curses.h>
 
-#define SIZE_X 20
-#define SIZE_Y 20
-#define RANDOMIZER_SEED srand(time(NULL))
 
+
+void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER], int NbMonstre) {
+     int var_y, var_x, new_pos_x, new_pos_y;
+
+    for (int i = 0; i < NbMonstre; i++)
+    {
+        switch (TableMonstre[i].type)
+        {
+        default:
+            var_x = alea(-1,1);
+            var_y = alea(-1,1);
+            new_pos_y = TableMonstre[i].pos_y+var_y; 
+            new_pos_x = TableMonstre[i].pos_x+var_x; 
+            carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = ' ';
+            carte[new_pos_y][new_pos_x] = TableMonstre[i].type + '0';
+            TableMonstre[i].pos_y = new_pos_y;
+            TableMonstre[i].pos_x = new_pos_x;
+
+            break;
+        }
+    }
+}
 
 void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
 
@@ -43,7 +62,7 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         break;
     case 'C':
         if(Joueur->nb_key>=1) {
-            RANDOMIZER_SEED;
+            //RANDOMIZER_SEED;
             int p_or_c = rand()%SIZE_X;
             if(p_or_c %2 == 0) { Joueur->coins += 1;}
             else               { Joueur->life -= 1; }
@@ -74,7 +93,7 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
     case 'X':
         break;
     case 'P':
-        RANDOMIZER_SEED;
+        /*//RANDOMIZER_SEED;
         int random = rand()%SIZE_Y;
         if(random<SIZE_X/2 && random > 0) {
             Joueur->life-=1;
@@ -89,7 +108,7 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
             carte[Joueur->poscab_y][Joueur->poscab_x - 1] = 'J';
             Joueur->pos_y = Joueur->poscab_y;
             Joueur->pos_x = Joueur->poscab_x - 1;
-        }
+        }*/
         break;
     //Cases de bases (espaces)
     default:
@@ -108,7 +127,7 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
     }
 }
 
-void input_player(char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
+void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur) {
     char direction = get_char();
 
     int var_x = 0;
