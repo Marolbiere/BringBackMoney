@@ -3,8 +3,6 @@
 #include <time.h>
 #include <curses.h>
 
-#define SIZE_X 20
-#define SIZE_Y 20
 
 
 void bordures(int size_x) {
@@ -49,7 +47,7 @@ void interface_cabane(s_player *Joueur) {
     //int flag_depot = 0;
     int temp_piece = 0;
     char key;
-    clear();
+    //clear();
     while(flag_interface!=1) {
         clrtoeol();
         nodelay(stdscr, TRUE); 
@@ -64,7 +62,7 @@ void interface_cabane(s_player *Joueur) {
         case 'p':   
             if((Joueur->coins)>0) {
                 nodelay(stdscr, FALSE);
-
+                echo();
                 mvprintw(17, 30,"Combien de pieces voulez vous deposer ? :");
                 wscanw(stdscr,"%d", &temp_piece);
                 if(temp_piece<=Joueur->coins) {
@@ -88,7 +86,8 @@ void interface_cabane(s_player *Joueur) {
     }
 }
 
-void interface_joueur(s_player *Joueur) {
+void interface_joueur(s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
+    printw("pos y monstre : %d, pos x monstre : %d\n", TableMonstre[0].pos_y, TableMonstre[0].pos_x);
     printw("Life : %d/5\n",Joueur->life);
     printw("Money : %d\n",Joueur->coins);
     printw("Key : %d\n",Joueur->nb_key);
