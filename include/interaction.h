@@ -5,11 +5,36 @@
 
 void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER], int n_y, int n_x, int i) {
     if(n_y >= 0 && n_y <= SIZE_Y -1 && n_x >= 0 && n_x <= SIZE_X -1) {
-        if(carte[n_y][n_x] != 'X' && carte[n_y][n_x] != 'H') {
+        switch (carte[n_y][n_x])
+        {
+        case 'H':
+        case 'X':
+            break;
+        case 'K':
             carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = ' ';
             carte[n_y][n_x] = TableMonstre[i].type + '0';
             TableMonstre[i].pos_y = n_y;
             TableMonstre[i].pos_x = n_x;
+            TableMonstre[i].on_object = 'K';
+        case 'O':
+            carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = ' ';
+            carte[n_y][n_x] = TableMonstre[i].type + '0';
+            TableMonstre[i].pos_y = n_y;
+            TableMonstre[i].pos_x = n_x;
+            TableMonstre[i].on_object = 'O';
+            break;
+        default:
+            if(TableMonstre[i].on_object) {
+                carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = TableMonstre[i].on_object;
+                TableMonstre[i].on_object = 0;
+            }
+            else if(TableMonstre[i].on_object == 0) {
+                carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = ' ';   
+            }
+            carte[n_y][n_x] = TableMonstre[i].type + '0';
+            TableMonstre[i].pos_y = n_y;
+            TableMonstre[i].pos_x = n_x;
+            break;
         }
     }
 }
@@ -28,8 +53,8 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
                 mvt_Monstre(carte,TableMonstre, n_y, n_x, i);
                 break;
             default:
-                var_y = alea(-1,1);
-                var_x = alea(-1,1);
+                var_y = -1;//alea(-1,1);
+                var_x = 0;//alea(-1,1);
                 n_y = TableMonstre[i].pos_y+var_y; 
                 n_x = TableMonstre[i].pos_x+var_x;
                 mvt_Monstre(carte,TableMonstre, n_y, n_x, i); 
