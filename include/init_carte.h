@@ -140,14 +140,14 @@ void placement_piege(char carte[SIZE_Y][SIZE_X]) {
 
 void placement_monstre(char carte[SIZE_X][SIZE_X], s_monster tabMonstre[MAX_MONSTER]) {
     RANDOMIZER_SEED;
-    int NbMonstre = 1;//alea(2,5);
+    int NbMonstre = alea(2,5);
     int TypeMonstre;
     int nb_random_x, nb_random_y;
 
     for (int i = 0; i < NbMonstre; i++) {
         nb_random_x = alea(2,18);
         nb_random_y = alea(2,18);
-        TypeMonstre = 1;//alea(1,8);
+        TypeMonstre = 1;//alea(1,2);
 
         while(carte[nb_random_y][nb_random_x] == ' ') {
             tabMonstre[i].on_object = 0;
@@ -158,7 +158,6 @@ void placement_monstre(char carte[SIZE_X][SIZE_X], s_monster tabMonstre[MAX_MONS
             carte[nb_random_y][nb_random_x] = TypeMonstre + '0'; //Affichage ASCII de son Type (Exemple : 1 + '0' = '1')
         }
     }
-    
 }
 
 void placement_joueur_cabane(char carte[SIZE_X][SIZE_X], s_player *Joueur) {
