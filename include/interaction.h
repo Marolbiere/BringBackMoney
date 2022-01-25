@@ -2,38 +2,35 @@
 #include <stdio.h>
 #include <time.h>
 #include <curses.h>
+void passage_objet(s_monster TableMonstre[MAX_MONSTER],char carte[SIZE_Y][SIZE_X], char direction, int n_y, int n_x, int i) {
+    if(TableMonstre[i].on_object) {
+                carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = TableMonstre[i].on_object;
+            }
+            else if(TableMonstre[i].on_object == 0) {
+                carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = ' ';
+            }
+            carte[n_y][n_x] = TableMonstre[i].type + '0';
+            TableMonstre[i].pos_y = n_y;
+            TableMonstre[i].pos_x = n_x;
+            TableMonstre[i].on_object = direction;
+}
 
 void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER], int n_y, int n_x, int i) {
     if(n_y >= 0 && n_y <= SIZE_Y -1 && n_x >= 0 && n_x <= SIZE_X -1) {
+
         switch (carte[n_y][n_x])
         {
         case 'H':
         case 'X':
             break;
         case 'K':
-            carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = ' ';
-            carte[n_y][n_x] = TableMonstre[i].type + '0';
-            TableMonstre[i].pos_y = n_y;
-            TableMonstre[i].pos_x = n_x;
-            TableMonstre[i].on_object = 'K';
+            passage_objet(TableMonstre, carte, 'K', n_y, n_x,i);
+            break;
         case 'O':
-            carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = ' ';
-            carte[n_y][n_x] = TableMonstre[i].type + '0';
-            TableMonstre[i].pos_y = n_y;
-            TableMonstre[i].pos_x = n_x;
-            TableMonstre[i].on_object = 'O';
+            passage_objet(TableMonstre, carte, 'O', n_y, n_x,i);
             break;
         default:
-            if(TableMonstre[i].on_object) {
-                carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = TableMonstre[i].on_object;
-                TableMonstre[i].on_object = 0;
-            }
-            else if(TableMonstre[i].on_object == 0) {
-                carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = ' ';   
-            }
-            carte[n_y][n_x] = TableMonstre[i].type + '0';
-            TableMonstre[i].pos_y = n_y;
-            TableMonstre[i].pos_x = n_x;
+            passage_objet(TableMonstre, carte, ' ', n_y, n_x,i);
             break;
         }
     }
@@ -53,8 +50,8 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
                 mvt_Monstre(carte,TableMonstre, n_y, n_x, i);
                 break;
             default:
-                var_y = -1;//alea(-1,1);
-                var_x = 0;//alea(-1,1);
+                var_y = alea(-1,1);
+                var_x = alea(-1,1);
                 n_y = TableMonstre[i].pos_y+var_y; 
                 n_x = TableMonstre[i].pos_x+var_x;
                 mvt_Monstre(carte,TableMonstre, n_y, n_x, i); 
@@ -158,6 +155,10 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         Joueur->pos_y = new_pos_y;
         break;
     case 'H':
+        /*carte[Joueur->pos_y][Joueur->pos_x] = ' ';
+        carte[new_pos_y][new_pos_x] = 'A';
+        Joueur->pos_y = new_pos_y;
+        Joueur->pos_x = new_pos_x;*/
         interface_cabane(Joueur);
         break;
     case 'X':
@@ -210,7 +211,6 @@ void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur) {
             }*/
             break;
     }
-
     int new_pos_x = Joueur->pos_x + var_x;
     int new_pos_y = Joueur->pos_y + var_y;
     interaction_environnement(new_pos_y,new_pos_x,carte,Joueur);
