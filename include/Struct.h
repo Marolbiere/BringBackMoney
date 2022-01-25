@@ -14,7 +14,9 @@ struct Squelette_Monster { //information Monstre
     int pos_x;
     int pos_y;
     int type;
+    int NbMonstre;
 };
+
 
 typedef struct Squelette_Player s_player;
 typedef struct Squelette_Monster s_monster;
