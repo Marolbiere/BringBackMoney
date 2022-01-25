@@ -87,7 +87,7 @@ void interface_cabane(s_player *Joueur) {
 }
 
 void interface_joueur(s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
-    //printw("Monstre sur Objet : %c \n", TableMonstre[0].on_object);
+    printw("Monstre sur Objet : %c \n", TableMonstre[0].on_object);
     printw("pos y monstre : %d, pos x monstre : %d\n", TableMonstre[0].pos_y, TableMonstre[0].pos_x);
     printw("Life : %d/5\n",Joueur->life);
     printw("Money : %d\n",Joueur->coins);
