@@ -15,6 +15,7 @@ struct Squelette_Monster { //information Monstre
     int pos_y;
     int type;
     int NbMonstre;
+    char on_object;
 };
 
 
