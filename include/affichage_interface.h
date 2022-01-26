@@ -87,8 +87,15 @@ void interface_cabane(s_player *Joueur) {
 }
 
 void interface_joueur(s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
-    printw("Monstre sur Objet : %c \n", TableMonstre[0].on_object);
-    printw("pos y monstre : %d, pos x monstre : %d\n", TableMonstre[0].pos_y, TableMonstre[0].pos_x);
+    int temp;
+    for (int i = 0; i < TableMonstre[0].NbMonstre; i++){
+        mvprintw(i+1,60,"Monstre n%d sur Objet : %c",i, TableMonstre[i].on_object);
+        temp = i;
+    }
+    for (int j = 0; j < TableMonstre[0].NbMonstre; j++){
+        mvprintw(temp+1+j,60,"PosY Monstre n%d : %d, PosX Monstre n%d: %d", j, TableMonstre[j].pos_y, j, TableMonstre[j].pos_x);
+    }
+    move(24,0);
     printw("Life : %d/5\n",Joueur->life);
     printw("Money : %d\n",Joueur->coins);
     printw("Key : %d\n",Joueur->nb_key);
