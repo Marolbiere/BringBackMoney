@@ -2,8 +2,22 @@
 #include <stdio.h>
 #include <time.h>
 #include <curses.h>
-void passage_objet(s_monster TableMonstre[MAX_MONSTER],char carte[SIZE_Y][SIZE_X], char direction, int n_y, int n_x, int i) {
-    if(TableMonstre[i].on_object) {
+
+void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_monster TableMonstre[MAX_MONSTER], int i) {
+    int nb_random_x = alea(2,18);
+    int nb_random_y = alea(2,18);
+    Joueur->life-=1;
+    while(carte[nb_random_y][nb_random_x] == ' ') {
+        TableMonstre[i].pos_x = nb_random_x;
+        TableMonstre[i].pos_y = nb_random_y;
+    }
+}
+
+void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER], int n_y, int n_x, int i) {
+    if(n_y >= 0 && n_y <= SIZE_Y -1 && n_x >= 0 && n_x <= SIZE_X -1) {
+        char object = carte[n_y][n_x];
+        if(object != 'X' && object != 'H' && object != (TableMonstre[i].type + '0')) {
+            if(TableMonstre[i].on_object) {
                 carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = TableMonstre[i].on_object;
             }
             else if(TableMonstre[i].on_object == 0) {
@@ -12,50 +26,25 @@ void passage_objet(s_monster TableMonstre[MAX_MONSTER],char carte[SIZE_Y][SIZE_X
             carte[n_y][n_x] = TableMonstre[i].type + '0';
             TableMonstre[i].pos_y = n_y;
             TableMonstre[i].pos_x = n_x;
-            TableMonstre[i].on_object = direction;
-}
-
-void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER], int n_y, int n_x, int i) {
-    if(n_y >= 0 && n_y <= SIZE_Y -1 && n_x >= 0 && n_x <= SIZE_X -1) {
-
-        switch (carte[n_y][n_x])
-        {
-        case 'H':
-        case 'X':
-            break;
-        case 'K':
-            passage_objet(TableMonstre, carte, 'K', n_y, n_x,i);
-            break;
-        case 'O':
-            passage_objet(TableMonstre, carte, 'O', n_y, n_x,i);
-            break;
-        default:
-            passage_objet(TableMonstre, carte, ' ', n_y, n_x,i);
-            break;
+            TableMonstre[i].on_object = object;
         }
     }
 }
 
 void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER]) {
-     int var_y, var_x, n_x, n_y;
-
+    int n_x, n_y;
     for (int i = 0; i < TableMonstre[0].NbMonstre; i++)
     {
             switch (TableMonstre[i].type) {
-            case 2: 
-                var_y = alea(-3,3);
-                var_x = alea(-3,3);
-                n_y = TableMonstre[i].pos_y+var_y;
-                n_x = TableMonstre[i].pos_x+var_x;
+            case 2:
+                n_y = TableMonstre[i].pos_y + alea(-3,3);
+                n_x = TableMonstre[i].pos_x + alea(-3,3);
                 mvt_Monstre(carte,TableMonstre, n_y, n_x, i);
                 break;
             default:
-                var_y = alea(-1,1);
-                var_x = alea(-1,1);
-                n_y = TableMonstre[i].pos_y+var_y; 
-                n_x = TableMonstre[i].pos_x+var_x;
+                n_y = TableMonstre[i].pos_y + alea(-1,1);
+                n_x = TableMonstre[i].pos_x + alea(-1,1);
                 mvt_Monstre(carte,TableMonstre, n_y, n_x, i); 
-                
                 break;
             }
     }
@@ -94,91 +83,57 @@ void trap(char carte[SIZE_Y][SIZE_X], s_player *Joueur,int new_pos_y, int new_po
     }
 }
 
-void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
+void deplacement(char carte[SIZE_Y][SIZE_X], s_player *Joueur, int new_pos_y, int new_pos_x) {
+    if (Joueur->J_buissons == 1) {
+        carte[Joueur->pos_y][Joueur->pos_x] = 'G';
+        carte[new_pos_y][new_pos_x] = 'J';
+        Joueur->J_buissons = 0;
+    }
+    else {
+        carte[Joueur->pos_y][Joueur->pos_x] = ' ';
+        carte[new_pos_y][new_pos_x] = 'J';
+    }
+    Joueur->pos_x = new_pos_x;
+    Joueur->pos_y = new_pos_y;
+}
 
+void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
     switch (carte[new_pos_y][new_pos_x])
     {
     //Cases où on peut passer dessus
-    case 'O':
-        if (Joueur->J_buissons == 1) {
-            carte[Joueur->pos_y][Joueur->pos_x] = 'G';
-            carte[new_pos_y][new_pos_x] = 'J';
-            Joueur->J_buissons = 0;
-        }
-        else {
-            Joueur->coins+=1;
-            carte[Joueur->pos_y][Joueur->pos_x] = ' ';
-            carte[new_pos_y][new_pos_x] = 'J';
-        }
-        Joueur->pos_x = new_pos_x;
-        Joueur->pos_y = new_pos_y;
+    case 'O': //Pièce
+        deplacement(carte,Joueur,new_pos_y,new_pos_x);
+        Joueur->coins+=1;
         break;
-    case 'G':
-        if(Joueur->J_buissons == 0) {
-            carte[Joueur->pos_y][Joueur->pos_x] = ' ';
-            carte[new_pos_y][new_pos_x] = 'J';
-            Joueur->J_buissons = 1;
-        }
-        else{
-            carte[Joueur->pos_y][Joueur->pos_x] = 'G';
-            carte[new_pos_y][new_pos_x] = 'J';
-            Joueur->J_buissons = 1;
-        }
-        Joueur->pos_x = new_pos_x;
-        Joueur->pos_y = new_pos_y;
+    case 'G': //Buisson
+        deplacement(carte,Joueur,new_pos_y,new_pos_x);
+        Joueur->J_buissons = 1;
         break;
-    case 'C':
+    case 'C': //Coffre
         if(Joueur->nb_key>=1) {
             //RANDOMIZER_SEED;
             int p_or_c = rand()%SIZE_X;
             if(p_or_c %2 == 0) { Joueur->coins += 1;}
-            else               { Joueur->life -= 1; }
-            carte[Joueur->pos_y][Joueur->pos_x] = ' ';
-            carte[new_pos_y][new_pos_x] = 'J';
-            Joueur->pos_x = new_pos_x;
-            Joueur->pos_y = new_pos_y;
+            else               { trap(carte,Joueur,new_pos_y,new_pos_x); }
+            deplacement(carte,Joueur,new_pos_y,new_pos_x);
             Joueur-> nb_key -=1;
         }
         break;
-    case 'K':
-        if (Joueur->J_buissons == 1) {
-            carte[Joueur->pos_y][Joueur->pos_x] = 'G';
-            carte[new_pos_y][new_pos_x] = 'J';
-            Joueur->J_buissons = 0;
-        }
-        else {
-            Joueur->nb_key+=1;
-            carte[Joueur->pos_y][Joueur->pos_x] = ' ';
-            carte[new_pos_y][new_pos_x] = 'J';
-        }
-        Joueur->pos_x = new_pos_x;
-        Joueur->pos_y = new_pos_y;
+    case 'K': //Clé
+        deplacement(carte,Joueur,new_pos_y,new_pos_x);
+        Joueur->nb_key+=1;
         break;
     case 'H':
-        /*carte[Joueur->pos_y][Joueur->pos_x] = ' ';
-        carte[new_pos_y][new_pos_x] = 'A';
-        Joueur->pos_y = new_pos_y;
-        Joueur->pos_x = new_pos_x;*/
         interface_cabane(Joueur);
         break;
-    case 'X':
+    case 'X': //Obstacle
         break;
-    case 'P':
+    case 'P': //Piège
         trap(carte,Joueur,new_pos_y,new_pos_x);
         break;
-    //Cases de bases (espaces)
+    //Cases de bases (espace)
     default:
-        if (Joueur->J_buissons == 1) {
-            carte[Joueur->pos_y][Joueur->pos_x] = 'G';
-            carte[new_pos_y][new_pos_x] = 'J';
-            Joueur->J_buissons = 0;
-        }
-        else {
-            carte[Joueur->pos_y][Joueur->pos_x] = ' ';
-            carte[new_pos_y][new_pos_x] = 'J';
-        }
-        Joueur->pos_x = new_pos_x;
-        Joueur->pos_y = new_pos_y;
+        deplacement(carte,Joueur,new_pos_y,new_pos_x);
         break;
     }
 }
