@@ -5,7 +5,7 @@
 
 
 
-void bordures(int size_x) {
+void bordures(int size_x) { //Affichage des bordures
     for (int a = 0; a < size_x + 2; a++) {
         if(a == 0)                printw("|");
         else if (a == size_x + 1) printw("|\n");
@@ -43,6 +43,7 @@ void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
  }
 
 void interface_cabane(s_player *Joueur) {
+    //Affichage de l'interface cabane avec gestion de dépôt de pièces
     int flag_interface = 0;
     //int flag_depot = 0;
     int temp_piece = 0;
@@ -87,6 +88,7 @@ void interface_cabane(s_player *Joueur) {
 }
 
 void interface_joueur(s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
+    //interface du joueur en dessous de la carte 
     int temp;
     for (int i = 0; i < TableMonstre[0].NbMonstre; i++){
         mvprintw(i+1,60,"Monstre n%d sur Objet : %c",i, TableMonstre[i].on_object);
