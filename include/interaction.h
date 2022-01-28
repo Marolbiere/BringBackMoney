@@ -7,31 +7,39 @@ void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_m
     int nb_random_x = alea(2,18);
     int nb_random_y = alea(2,18);
     Joueur->life-=1;
-    while(carte[nb_random_y][nb_random_x] == ' ') {
+    do {
         TableMonstre[i].pos_x = nb_random_x;
         TableMonstre[i].pos_y = nb_random_y;
-    }
+    }   while(carte[nb_random_y][nb_random_x] != ' ');
+    carte[nb_random_y][nb_random_x] = TableMonstre[i].type + '0';
 }
 
-void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER], int n_y, int n_x, int i) {
+void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER], s_player *Joueur, int n_y, int n_x, int i) {
     if(n_y >= 0 && n_y <= SIZE_Y -1 && n_x >= 0 && n_x <= SIZE_X -1) {
         char object = carte[n_y][n_x];
         if(object != 'X' && object != 'H' && object != (TableMonstre[i].type + '0')) {
-            if(TableMonstre[i].on_object) {
-                carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = TableMonstre[i].on_object;
-            }
-            else if(TableMonstre[i].on_object == 0) {
+            if(object=='J') {
                 carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = ' ';
+                interaction_monstre_joueur(carte,Joueur,TableMonstre,i);
+                carte[n_y][n_x] = 'J';
             }
-            carte[n_y][n_x] = TableMonstre[i].type + '0';
-            TableMonstre[i].pos_y = n_y;
-            TableMonstre[i].pos_x = n_x;
-            TableMonstre[i].on_object = object;
+            else {
+                if(TableMonstre[i].on_object) {
+                    carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = TableMonstre[i].on_object;
+                }
+                else if(TableMonstre[i].on_object == 0) {
+                    carte[TableMonstre[i].pos_y][TableMonstre[i].pos_x] = ' ';
+                }
+                carte[n_y][n_x] = TableMonstre[i].type + '0';
+                TableMonstre[i].pos_y = n_y;
+                TableMonstre[i].pos_x = n_x;
+                TableMonstre[i].on_object = object;
+            }
         }
     }
 }
 
-void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER]) {
+void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER], s_player *Joueur) {
     int n_x, n_y;
     for (int i = 0; i < TableMonstre[0].NbMonstre; i++)
     {
@@ -39,12 +47,12 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
             case 2:
                 n_y = TableMonstre[i].pos_y + alea(-3,3);
                 n_x = TableMonstre[i].pos_x + alea(-3,3);
-                mvt_Monstre(carte,TableMonstre, n_y, n_x, i);
+                mvt_Monstre(carte,TableMonstre, Joueur, n_y, n_x, i);
                 break;
             default:
                 n_y = TableMonstre[i].pos_y + alea(-1,1);
                 n_x = TableMonstre[i].pos_x + alea(-1,1);
-                mvt_Monstre(carte,TableMonstre, n_y, n_x, i); 
+                mvt_Monstre(carte,TableMonstre, Joueur,n_y, n_x, i); 
                 break;
             }
     }
@@ -113,8 +121,9 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         if(Joueur->nb_key>=1) {
             //RANDOMIZER_SEED;
             int p_or_c = rand()%SIZE_X;
-            if(p_or_c %2 == 0) { Joueur->coins += 1;}
-            else               { trap(carte,Joueur,new_pos_y,new_pos_x); }
+            if(p_or_c >= 0 && p_or_c <= SIZE_X/2)              { Joueur->coins += 1; }
+            else if(p_or_c > SIZE_X/2 && p_or_c <= SIZE_X - 5) { trap(carte,Joueur,new_pos_y,new_pos_x); }
+            else                                               { if(Joueur->life<5) Joueur->life+= 1; }
             deplacement(carte,Joueur,new_pos_y,new_pos_x);
             Joueur-> nb_key -=1;
         }
@@ -131,6 +140,7 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
     case 'P': //Piège
         trap(carte,Joueur,new_pos_y,new_pos_x);
         break;
+    //case '1' || '2' || '3' || '4' || '5' || '6' || '7' || '8':
     //Cases de bases (espace)
     default:
         deplacement(carte,Joueur,new_pos_y,new_pos_x);
