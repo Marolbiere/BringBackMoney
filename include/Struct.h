@@ -19,8 +19,8 @@ struct Squelette_Monster { //information Monstre
 };
 
 
-typedef struct Squelette_Player s_player;
-typedef struct Squelette_Monster s_monster;
+typedef struct Squelette_Player s_player;   //s_player diminutif de la structure
+typedef struct Squelette_Monster s_monster; //s_monster diminutif de la structure
 
 
 void init_player(s_player *Joueur) {

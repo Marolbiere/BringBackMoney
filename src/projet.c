@@ -7,7 +7,7 @@
 char get_char() { //Fonction global de relevé de caractère
     char direction;
     while(1) {
-        direction = tolower(getch());
+        direction = tolower(getch()); //récupérer uniquement en minuscule
         if(direction == 'z' || direction == 'q' || direction == 's' || direction == 'd' || direction == 'i' || direction == 'p' || direction =='e') 
             return direction;
     }
@@ -18,7 +18,7 @@ char get_char() { //Fonction global de relevé de caractère
 #define SIZE_Y 20
 #define RANDOMIZER_SEED srand(time(NULL))
 
-char alea(int min, int max) {
+char alea(int min, int max) { //Fonction générale aléatoire
     return rand()%(max + 1 - min) + min;
 }
 
@@ -39,7 +39,6 @@ char alea(int min, int max) {
 
 
 int verif_case(char carte[SIZE_Y][SIZE_X], s_player *Joueur, char caractere) {
-
     return  carte[Joueur->pos_y - 1][Joueur->pos_x] == caractere || 
             carte[Joueur->pos_y + 1][Joueur->pos_x] == caractere || 
             carte[Joueur->pos_y][Joueur->pos_x - 1] == caractere || 
