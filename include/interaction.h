@@ -4,6 +4,8 @@
 #include <curses.h>
 
 void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_monster TableMonstre[MAX_MONSTER], int i) {
+    //Interaction entre monstre et Joueur
+    RANDOMIZER_SEED;
     int nb_random_x = alea(2,18);
     int nb_random_y = alea(2,18);
     Joueur->life-=1;
@@ -15,6 +17,7 @@ void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_m
 }
 
 void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER], s_player *Joueur, int n_y, int n_x, int i) {
+    //Fonction global de mvt du monstre + interaction avec l'environnement
     if(n_y >= 0 && n_y <= SIZE_Y -1 && n_x >= 0 && n_x <= SIZE_X -1) {
         char object = carte[n_y][n_x];
         if(object != 'X' && object != 'H' && object != (TableMonstre[i].type + '0')) {
@@ -40,6 +43,8 @@ void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER]
 }
 
 void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER], s_player *Joueur) {
+    //Fonction checkant les types de monstre
+    RANDOMIZER_SEED;
     int n_x, n_y;
     for (int i = 0; i < TableMonstre[0].NbMonstre; i++)
     {
@@ -59,6 +64,7 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
 }
 
 void trap(char carte[SIZE_Y][SIZE_X], s_player *Joueur,int new_pos_y, int new_pos_x) {
+    //Gestion des traps
     RANDOMIZER_SEED;
     int type_trap = alea(1,3);
     int r_y = alea(2,18);
@@ -92,6 +98,7 @@ void trap(char carte[SIZE_Y][SIZE_X], s_player *Joueur,int new_pos_y, int new_po
 }
 
 void deplacement(char carte[SIZE_Y][SIZE_X], s_player *Joueur, int new_pos_y, int new_pos_x) {
+    //Gestion global des déplacement du joueur
     if (Joueur->J_buissons == 1) {
         carte[Joueur->pos_y][Joueur->pos_x] = 'G';
         carte[new_pos_y][new_pos_x] = 'J';
@@ -106,6 +113,7 @@ void deplacement(char carte[SIZE_Y][SIZE_X], s_player *Joueur, int new_pos_y, in
 }
 
 void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
+    //Interaction avec environnement
     switch (carte[new_pos_y][new_pos_x])
     {
     //Cases où on peut passer dessus
@@ -149,6 +157,7 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
 }
 
 void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur) {
+    //Ajout des coordonnées en fonctions du déplacement demandé
     char direction = get_char();
 
     int var_x = 0;
