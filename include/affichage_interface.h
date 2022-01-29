@@ -64,7 +64,7 @@ void interface_cabane(s_player *Joueur) {
             if((Joueur->coins)>0) {
                 nodelay(stdscr, FALSE);
                 echo();
-                mvprintw(17, 30,"Combien de pieces voulez vous deposer ? :");
+                mvprintw(17, 30,"Combien de pieces voulez vous deposer ? : ");
                 wscanw(stdscr,"%d", &temp_piece);
                 if(temp_piece<=Joueur->coins) {
                     Joueur->cabane_coins += temp_piece;
