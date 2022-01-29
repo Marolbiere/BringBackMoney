@@ -147,7 +147,7 @@ void placement_monstre(char carte[SIZE_X][SIZE_X], s_monster tabMonstre[MAX_MONS
     for (int i = 0; i < NbMonstre; i++) {
         nb_random_x = alea(2,18);
         nb_random_y = alea(2,18);
-        TypeMonstre = 1;//alea(1,2);
+        TypeMonstre = alea(1,2);
 
         while(carte[nb_random_y][nb_random_x] == ' ') {
             tabMonstre[i].on_object = 0;
