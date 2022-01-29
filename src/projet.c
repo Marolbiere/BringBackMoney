@@ -78,7 +78,8 @@ int main()  {
     //Message de loose
     clear();
     while(Joueur.life==0) {
-        mvprintw(14, 30,"Oh non t'es mové");
+        printw("Rah Mince tu as perdu, reessaye un coup");
         getch();
     }
 }
+
