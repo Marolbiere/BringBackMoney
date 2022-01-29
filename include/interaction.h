@@ -151,7 +151,7 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
     case 'P': //Piège
         trap(carte,Joueur,new_pos_y,new_pos_x);
         break;
-    case '1':
+    case '1'||'2'||'3'||'4'||'5'||'6'||'7'||'8':
         interaction_joueur_monstre(carte,Joueur,TableMonstre);
     //Cases de bases (espace)
     default:
