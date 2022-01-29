@@ -16,6 +16,15 @@ void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_m
     carte[nb_random_y][nb_random_x] = TableMonstre[i].type + '0';
 }
 
+void interaction_jouer_monstre(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
+    for (int i = 0; i < TableMonstre[0].NbMonstre; i++) {
+        if((Joueur->pos_y == TableMonstre[i].pos_y) && (Joueur->pos_x == TableMonstre[i].pos_x)) {
+            interaction_monstre_joueur(carte,Joueur,TableMonstre,i);
+        }
+    }
+    
+}
+
 void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER], s_player *Joueur, int n_y, int n_x, int i) {
     //Fonction global de mvt du monstre + interaction avec l'environnement
     if(n_y >= 0 && n_y <= SIZE_Y -1 && n_x >= 0 && n_x <= SIZE_X -1) {
@@ -108,7 +117,7 @@ void deplacement(char carte[SIZE_Y][SIZE_X], s_player *Joueur, int new_pos_y, in
     Joueur->pos_y = new_pos_y;
 }
 
-void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
+void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][SIZE_Y], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
     switch (carte[new_pos_y][new_pos_x])
     {
     //Cases où on peut passer dessus
@@ -142,6 +151,8 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
     case 'P': //Piège
         trap(carte,Joueur,new_pos_y,new_pos_x);
         break;
+    case '1' :
+        interaction_jouer_monstre(carte,Joueur,TableMonstre);
     //Cases de bases (espace)
     default:
         deplacement(carte,Joueur,new_pos_y,new_pos_x);
@@ -149,7 +160,7 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
     }
 }
 
-void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur) {
+void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
     char direction = get_char();
 
     int var_x = 0;
@@ -179,5 +190,5 @@ void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur) {
     }
     int new_pos_x = Joueur->pos_x + var_x;
     int new_pos_y = Joueur->pos_y + var_y;
-    interaction_environnement(new_pos_y,new_pos_x,carte,Joueur);
+    interaction_environnement(new_pos_y,new_pos_x,carte,Joueur, TableMonstre);
 }
