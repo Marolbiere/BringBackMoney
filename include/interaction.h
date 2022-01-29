@@ -16,6 +16,15 @@ void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_m
     carte[nb_random_y][nb_random_x] = TableMonstre[i].type + '0';
 }
 
+void interaction_joueur_monstre(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
+    for (int i = 0; i < TableMonstre[0].NbMonstre; i++) {
+        if(Joueur->pos_y==TableMonstre[i].pos_y && Joueur->pos_x==TableMonstre[i].pos_x) {
+            interaction_monstre_joueur(carte,Joueur,TableMonstre,i);
+        }
+    }
+    
+}
+
 void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER], s_player *Joueur, int n_y, int n_x, int i) {
     //Fonction global de mvt du monstre + interaction avec l'environnement
     if(n_y >= 0 && n_y <= SIZE_Y -1 && n_x >= 0 && n_x <= SIZE_X -1) {
@@ -43,8 +52,6 @@ void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER]
 }
 
 void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER], s_player *Joueur) {
-    //Fonction checkant les types de monstre
-    RANDOMIZER_SEED;
     int n_x, n_y;
     for (int i = 0; i < TableMonstre[0].NbMonstre; i++)
     {
@@ -52,19 +59,18 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
             case 2:
                 n_y = TableMonstre[i].pos_y + alea(-3,3);
                 n_x = TableMonstre[i].pos_x + alea(-3,3);
-                mvt_Monstre(carte,TableMonstre, Joueur, n_y, n_x, i);
+                mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i);
                 break;
             default:
                 n_y = TableMonstre[i].pos_y + alea(-1,1);
                 n_x = TableMonstre[i].pos_x + alea(-1,1);
-                mvt_Monstre(carte,TableMonstre, Joueur,n_y, n_x, i); 
+                mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
                 break;
             }
     }
 }
 
 void trap(char carte[SIZE_Y][SIZE_X], s_player *Joueur,int new_pos_y, int new_pos_x) {
-    //Gestion des traps
     RANDOMIZER_SEED;
     int type_trap = alea(1,3);
     int r_y = alea(2,18);
@@ -98,7 +104,6 @@ void trap(char carte[SIZE_Y][SIZE_X], s_player *Joueur,int new_pos_y, int new_po
 }
 
 void deplacement(char carte[SIZE_Y][SIZE_X], s_player *Joueur, int new_pos_y, int new_pos_x) {
-    //Gestion global des déplacement du joueur
     if (Joueur->J_buissons == 1) {
         carte[Joueur->pos_y][Joueur->pos_x] = 'G';
         carte[new_pos_y][new_pos_x] = 'J';
@@ -112,8 +117,7 @@ void deplacement(char carte[SIZE_Y][SIZE_X], s_player *Joueur, int new_pos_y, in
     Joueur->pos_y = new_pos_y;
 }
 
-void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][SIZE_Y], s_player *Joueur) {
-    //Interaction avec environnement
+void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][SIZE_Y], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
     switch (carte[new_pos_y][new_pos_x])
     {
     //Cases où on peut passer dessus
@@ -129,9 +133,8 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         if(Joueur->nb_key>=1) {
             //RANDOMIZER_SEED;
             int p_or_c = rand()%SIZE_X;
-            if(p_or_c >= 0 && p_or_c <= SIZE_X/2)              { Joueur->coins += 1; }
-            else if(p_or_c > SIZE_X/2 && p_or_c <= SIZE_X - 5) { trap(carte,Joueur,new_pos_y,new_pos_x); }
-            else                                               { if(Joueur->life<5) Joueur->life+= 1; }
+            if(p_or_c %2 == 0) { Joueur->coins += 1;}
+            else               { trap(carte,Joueur,new_pos_y,new_pos_x); }
             deplacement(carte,Joueur,new_pos_y,new_pos_x);
             Joueur-> nb_key -=1;
         }
@@ -148,7 +151,8 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
     case 'P': //Piège
         trap(carte,Joueur,new_pos_y,new_pos_x);
         break;
-    //case '1' || '2' || '3' || '4' || '5' || '6' || '7' || '8':
+    case '1':
+        interaction_joueur_monstre(carte,Joueur,TableMonstre);
     //Cases de bases (espace)
     default:
         deplacement(carte,Joueur,new_pos_y,new_pos_x);
@@ -156,8 +160,7 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
     }
 }
 
-void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur) {
-    //Ajout des coordonnées en fonctions du déplacement demandé
+void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
     char direction = get_char();
 
     int var_x = 0;
@@ -187,5 +190,5 @@ void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur) {
     }
     int new_pos_x = Joueur->pos_x + var_x;
     int new_pos_y = Joueur->pos_y + var_y;
-    interaction_environnement(new_pos_y,new_pos_x,carte,Joueur);
+    interaction_environnement(new_pos_y,new_pos_x,carte,Joueur, TableMonstre);
 }

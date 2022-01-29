@@ -69,7 +69,7 @@ int main()  {
         printw("====Bring Back Money=====\n\n"); //titre
         affichage_carte(carte);                  //Fonction affichant la carte et ses bordures
         interface_joueur(&Joueur, TabMonstre);               //Fonction affichant l'interface du joueur (Vie, pièces etc..)
-        input_player(carte, &Joueur);            //Fonction d'évenement pour voir ou se déplace le joueur
+        input_player(carte, &Joueur, TabMonstre);            //Fonction d'évenement pour voir ou se déplace le joueur
         Type_Monstre(carte, TabMonstre, &Joueur);
         
         getch();
