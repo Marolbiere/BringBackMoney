@@ -93,8 +93,8 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
                 }
                 break;
             default:
-                n_y = TableMonstre[i].pos_y + alea(-1,1);
-                n_x = TableMonstre[i].pos_x + alea(-1,1);
+                n_y = TableMonstre[i].pos_y + 0;//alea(-1,1);
+                n_x = TableMonstre[i].pos_x + 0;//alea(-1,1);
                 mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
                 break;
             }
