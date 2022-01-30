@@ -16,13 +16,13 @@ void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_m
     carte[nb_random_y][nb_random_x] = TableMonstre[i].type + '0';
 }
 
+
 void interaction_joueur_monstre(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
     for (int i = 0; i < TableMonstre[0].NbMonstre; i++) {
         if(Joueur->pos_y==TableMonstre[i].pos_y && Joueur->pos_x==TableMonstre[i].pos_x) {
             interaction_monstre_joueur(carte,Joueur,TableMonstre,i);
         }
-    }
-    
+    } 
 }
 
 void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER], s_player *Joueur, int n_y, int n_x, int i) {
@@ -51,15 +51,47 @@ void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER]
     }
 }
 
+
+int * chemin_court(s_monster TableMonstre[MAX_MONSTER],s_player *Joueur, int i) {
+    static int Coord[2];
+    if(TableMonstre[i].pos_y <= Joueur->pos_y) {
+        Coord[0] = TableMonstre[i].pos_y + 1;
+    }
+    if(TableMonstre[i].pos_y >= Joueur->pos_y) {
+        Coord[0] = TableMonstre[i].pos_y - 1;
+    }
+    if(TableMonstre[i].pos_x <= Joueur->pos_x) {
+        Coord[1] = TableMonstre[i].pos_x + 1;
+    }
+    if(TableMonstre[i].pos_x >= Joueur->pos_x) {
+        Coord[1] = TableMonstre[i].pos_x - 1;
+    }
+    return Coord;
+}
+
 void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER], s_player *Joueur) {
     int n_x, n_y;
-    for (int i = 0; i < TableMonstre[0].NbMonstre; i++)
-    {
+    int *Coord;
+    for (int i = 0; i < TableMonstre[0].NbMonstre; i++) {
             switch (TableMonstre[i].type) {
             case 2:
                 n_y = TableMonstre[i].pos_y + alea(-3,3);
                 n_x = TableMonstre[i].pos_x + alea(-3,3);
                 mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i);
+                break;
+            case 3:
+                if(Joueur->J_buissons == 1 || Joueur->J_cabane == 1) {
+                    n_y = TableMonstre[i].pos_y + alea(-1,1);
+                    n_x = TableMonstre[i].pos_x + alea(-1,1);
+                    mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
+                }
+                else {
+                    Coord = chemin_court(TableMonstre,Joueur,i);
+                    n_y = *(Coord + 0);
+                    n_x = *(Coord + 1);
+                    mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
+                }
+                
                 break;
             default:
                 n_y = TableMonstre[i].pos_y + alea(-1,1);
@@ -140,11 +172,11 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         }
         break;
     case 'K': //Clé
-        deplacement(carte,Joueur,new_pos_y,new_pos_x);
         Joueur->nb_key+=1;
+        deplacement(carte,Joueur,new_pos_y,new_pos_x);
         break;
     case 'H':
-        interface_cabane(Joueur);
+        interface_cabane(Joueur,TableMonstre, carte, new_pos_y, new_pos_x);
         break;
     case 'X': //Obstacle
         break;
