@@ -26,7 +26,7 @@ typedef struct Squelette_Monster s_monster; //s_monster diminutif de la structur
 
 void init_player(s_player *Joueur) {
     //Création du joueur
-    Joueur->life = 5;
+    Joueur->life = 2;
     Joueur->nb_key = 0;
     Joueur->coins = 0;
     Joueur->cabane_coins = 0;
