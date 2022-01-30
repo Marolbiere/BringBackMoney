@@ -91,7 +91,6 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
                     n_x = *(Coord + 1);
                     mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
                 }
-                
                 break;
             default:
                 n_y = TableMonstre[i].pos_y + alea(-1,1);
@@ -211,13 +210,6 @@ void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableM
         case 'd': if(Joueur->pos_x != SIZE_X - 1) {var_x = 1;} 
             break;
         case 'i': 
-            /*if(verif_case(carte,Joueur,'C')) {
-                //ouverture_coffre(Joueur);
-                RANDOMIZER_SEED;
-                int p_or_c = rand()%SIZE_X;
-                if(p_or_c %2 == 0) { Joueur->coins += 1;}
-                else               { Joueur->life -= 1; }
-            }*/
             break;
     }
     int new_pos_x = Joueur->pos_x + var_x;
