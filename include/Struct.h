@@ -8,6 +8,7 @@ struct Squelette_Player { //Information du joueur
     int coins;
     int cabane_coins;
     int J_buissons;
+    int J_cabane;
 };
 
 struct Squelette_Monster { //information Monstre
@@ -30,4 +31,5 @@ void init_player(s_player *Joueur) {
     Joueur->coins = 0;
     Joueur->cabane_coins = 0;
     Joueur->J_buissons = 0;  
+    Joueur->J_cabane = 0;
 }
