@@ -8,12 +8,12 @@ void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_m
     RANDOMIZER_SEED;
     int nb_random_x = alea(2,18);
     int nb_random_y = alea(2,18);
-    Joueur->life-=1;
     do {
         TableMonstre[i].pos_x = nb_random_x;
         TableMonstre[i].pos_y = nb_random_y;
     }   while(carte[nb_random_y][nb_random_x] != ' ');
     carte[nb_random_y][nb_random_x] = TableMonstre[i].type + '0';
+    Joueur->life -= 1;
 }
 
 
@@ -93,8 +93,8 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
                 }
                 break;
             default:
-                n_y = TableMonstre[i].pos_y + 0;//alea(-1,1);
-                n_x = TableMonstre[i].pos_x + 0;//alea(-1,1);
+                n_y = TableMonstre[i].pos_y + alea(-1,1);
+                n_x = TableMonstre[i].pos_x + alea(-1,1);
                 mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
                 break;
             }
