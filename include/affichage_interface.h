@@ -42,7 +42,34 @@ void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
     bordures(SIZE_X);
  }
 
-void interface_cabane(s_player *Joueur) {
+void interface_joueur(s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
+    //interface du joueur en dessous de la carte 
+    int temp;
+    for (int i = 0; i < TableMonstre[0].NbMonstre; i++){
+        mvprintw(i+1,60,"Monstre n%d sur Objet : %c",i, TableMonstre[i].on_object);
+        temp = i;
+    }
+    for (int j = 0; j < TableMonstre[0].NbMonstre; j++){
+        mvprintw(temp+1+j,60,"PosY Monstre n%d : %d, PosX Monstre n%d: %d", j, TableMonstre[j].pos_y, j, TableMonstre[j].pos_x);
+    }
+    move(24,0);
+    printw("Life : %d/5\n",Joueur->life);
+    printw("Money : %d\n",Joueur->coins);
+    printw("Key : %d\n",Joueur->nb_key);
+    printw("Time Before the end :\n");
+}
+
+void interface_cabane(s_player *Joueur,s_monster TableMonstre[MAX_MONSTER], char carte[SIZE_Y][SIZE_X], int new_pos_y, int new_pos_x) {
+
+    carte[Joueur->pos_y][Joueur->pos_x] = ' ';
+    carte[new_pos_y][new_pos_x] = 'A';
+    Joueur->J_cabane = 1;
+    clear();
+    printw("====Bring Back Money=====\n\n");
+    affichage_carte(carte);                  
+    interface_joueur(Joueur, TableMonstre);        
+
+
     //Affichage de l'interface cabane avec gestion de dépôt de pièces
     int flag_interface = 0;
     //int flag_depot = 0;
@@ -81,25 +108,11 @@ void interface_cabane(s_player *Joueur) {
             break;
         case 'e':
             flag_interface = 1;
+            Joueur->J_cabane = 0;
+            carte[Joueur->pos_y][Joueur->pos_x] = 'J';
+            carte[new_pos_y][new_pos_x] = 'H';
             nodelay(stdscr, TRUE); 
             break;
         }
     }
-}
-
-void interface_joueur(s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
-    //interface du joueur en dessous de la carte 
-    int temp;
-    for (int i = 0; i < TableMonstre[0].NbMonstre; i++){
-        mvprintw(i+1,60,"Monstre n%d sur Objet : %c",i, TableMonstre[i].on_object);
-        temp = i;
-    }
-    for (int j = 0; j < TableMonstre[0].NbMonstre; j++){
-        mvprintw(temp+1+j,60,"PosY Monstre n%d : %d, PosX Monstre n%d: %d", j, TableMonstre[j].pos_y, j, TableMonstre[j].pos_x);
-    }
-    move(24,0);
-    printw("Life : %d/5\n",Joueur->life);
-    printw("Money : %d\n",Joueur->coins);
-    printw("Key : %d\n",Joueur->nb_key);
-    printw("Time Before the end :\n");
 }
