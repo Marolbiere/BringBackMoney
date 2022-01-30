@@ -4,8 +4,6 @@
 
 ### A faire :
 
-- Developper les pièges
-
 - Finaliser l'apparation random de tout
 
 - Développer les monstres et leur déplacement
@@ -14,10 +12,13 @@
 
 - Faire le menu (check ce qu'on peut faire avec curses)
 
-- Créer le systeme de dossier pour delivrable
-
 
 ### Finit :
+
+- Developper les pièges :white_check_mark:
+
+- Créer le systeme de dossier pour delivrable :white_check_mark:
+
 - Remplacer l'init.h pour nouveau terminal avec curses :white_check_mark:
 
 - Intégrer les déplacements dynamique avec curses :white_check_mark:
