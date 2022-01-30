@@ -77,13 +77,10 @@ void Game() {
         input_player(carte, &Joueur, TabMonstre);            //Fonction d'évenement pour voir ou se déplace le joueur
         Type_Monstre(carte, TabMonstre, &Joueur);
     }
-
     //Message de loose
     clear();
-    while(Joueur.life==0) {
-        box(stdscr, 0,0); 
-        mvprintw(14,30,"Rah Mince tu as perdu, reessaye un coup");
-    }
+    mvprintw(14,30,"Rah Mince tu as perdu, reessaye un coup");
+
 }
 int main()  {
     
