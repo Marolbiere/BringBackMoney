@@ -61,13 +61,15 @@ void interface_joueur(s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
 
 void interface_cabane(s_player *Joueur,s_monster TableMonstre[MAX_MONSTER], char carte[SIZE_Y][SIZE_X], int new_pos_y, int new_pos_x) {
 
+    //Rentre le joueur dans la cabane
     carte[Joueur->pos_y][Joueur->pos_x] = ' ';
     carte[new_pos_y][new_pos_x] = 'A';
     Joueur->J_cabane = 1;
     clear();
     printw("====Bring Back Money=====\n\n");
     affichage_carte(carte);                  
-    interface_joueur(Joueur, TableMonstre);        
+    interface_joueur(Joueur, TableMonstre);   
+    
 
 
     //Affichage de l'interface cabane avec gestion de dépôt de pièces
@@ -78,7 +80,7 @@ void interface_cabane(s_player *Joueur,s_monster TableMonstre[MAX_MONSTER], char
     //clear();
     while(flag_interface!=1) {
         clrtoeol();
-        nodelay(stdscr, TRUE); 
+        //nodelay(stdscr, TRUE); 
         mvprintw(10, 30,"Bienvenue dans votre interface cabane !");
         mvprintw(11, 30,"Vous avez actuellement %d pieces sur vous", Joueur->coins);
         mvprintw(12, 30,"Vous avez actuellement %d pieces dans votre cabane.", Joueur->cabane_coins);
@@ -89,10 +91,10 @@ void interface_cabane(s_player *Joueur,s_monster TableMonstre[MAX_MONSTER], char
         {
         case 'p':   
             if((Joueur->coins)>0) {
-                nodelay(stdscr, FALSE);
                 echo();
                 mvprintw(17, 30,"Combien de pieces voulez vous deposer ? : ");
                 wscanw(stdscr,"%d", &temp_piece);
+                noecho();
                 if(temp_piece<=Joueur->coins) {
                     Joueur->cabane_coins += temp_piece;
                     Joueur->coins -= temp_piece;
@@ -102,7 +104,6 @@ void interface_cabane(s_player *Joueur,s_monster TableMonstre[MAX_MONSTER], char
                 }
             }
             else {
-                nodelay(stdscr, FALSE); 
                 mvprintw(17, 30,"Malheuresement vous n'avez pas de pieces sur vous");
             }
             break;
@@ -111,7 +112,6 @@ void interface_cabane(s_player *Joueur,s_monster TableMonstre[MAX_MONSTER], char
             Joueur->J_cabane = 0;
             carte[Joueur->pos_y][Joueur->pos_x] = 'J';
             carte[new_pos_y][new_pos_x] = 'H';
-            nodelay(stdscr, TRUE); 
             break;
         }
     }
