@@ -8,7 +8,7 @@ char get_char() { //Fonction global de relevé de caractère
     char C;
     while(1) {
         C = tolower(getch()); //récupérer uniquement en minuscule
-        if(C == 'z' || C == 'q' || C == 's' || C == 'd' || C == 'i' || C == 'p' || C =='e' || C =='a' || C =='c' || C == 13) 
+        if(C == 'z' || C == 'q' || C == 's' || C == 'd' || C == 'i' || C == 'p' || C =='e' || C =='a' || C =='c' || C == 10) 
             return C;
     }
 }
@@ -45,7 +45,7 @@ int verif_case(char carte[SIZE_Y][SIZE_X], s_player *Joueur, char caractere) {
             carte[Joueur->pos_y][Joueur->pos_x + 1] == caractere;
 }
 
-void affichage_menu() {
+void affichage_titre() {
     clear();
     box(stdscr, 0,0); 
     int xMax = getmaxx(stdscr);                                            
@@ -59,53 +59,8 @@ void affichage_menu() {
     mvprintw(10,(xMax/2) - 82/2,"                     |___/                                                   |___/ ");
 
 }
-
-int main()  {
-    
-    //-----Initialisation du terminal Curses----//
-    initscr();
-    noecho();
-    cbreak(); //Pas besoin d'appuyer sur entrée pour valider une touche
-    scrollok(stdscr, TRUE); //Impossible de scroll le terminal ! 
-    //------------------------------------------//
-    while(1) {
-        int xMax = getmaxx(stdscr);
-        affichage_menu();
-        mvprintw(20, (xMax/2) - 23/2, "-->ENTREE POUR JOUER<--");
-        mvprintw(22, (xMax/2) - 12/2 - 12, "(c) COMMANDE");
-        mvprintw(22, (xMax/2) - 12/2 + 16, "(a) ABOUT");
-        
-        char choice = get_char();
-        //int var_interaction = 0;
-        switch (choice) {
-            case 'c': 
-                break;
-            case 'a':
-                affichage_menu();
-                mvprintw(12, 5, "Bring Back Money !");
-                mvprintw(13, 5, "Recuperez un maximum de pieces avant de mourir");
-                mvprintw(14, 5, "interagissez avec un monde rempli de caracteres !");
-                mvprintw(15, 5, "Description : ");
-                mvprintw(16, 7, "- \'J\' : Le joueur qu il faut deplacer sur la carte.");
-                mvprintw(17, 7, "- \'O\' : Les pieces a collecter (collecte automatique).");
-                mvprintw(18, 7, "- \'C\' : Des coffres qui peuvent soit contenir soit des pieces, soit des pieges.");
-                mvprintw(19, 7, "- \'K\' : Des cles pour ouvrir les coffres.");
-                mvprintw(20, 7, "- \'G\' : De l herbe qui permet de se cacher d un monstre intelligent.");
-                mvprintw(21, 7, "- \'X\' : Un obstacle qui empêche la bonne circulation du joueur.");
-                mvprintw(22, 7, "- \'H\' : Le spot de depart du joueur. Le joueur peut stocker des pieces dans la ");
-                mvprintw(23,15,"cabane sans que les monstres puissent lui voler.");
-                break;
-            case 13:
-                //Game();
-                break;
-        }
-
-        getch();
-
-    }
-
-    /*
-    //---Initialisation des Monstre, Joueur, carte---//
+void Game() {
+//---Initialisation des Monstre, Joueur, carte---//
     char carte[SIZE_X][SIZE_Y];
     s_monster TabMonstre[MAX_MONSTER];
     s_player Joueur;
@@ -126,7 +81,59 @@ int main()  {
     //Message de loose
     clear();
     while(Joueur.life==0) {
+        box(stdscr, 0,0); 
         mvprintw(14,30,"Rah Mince tu as perdu, reessaye un coup");
-    }*/
+    }
+}
+int main()  {
+    
+    //-----Initialisation du terminal Curses----//
+    initscr();
+    noecho();
+    cbreak(); //Pas besoin d'appuyer sur entrée pour valider une touche
+    scrollok(stdscr, TRUE); //Impossible de scroll le terminal ! 
+    //------------------------------------------//
+    char choice;
+    int xMax = getmaxx(stdscr);
+    affichage_titre();
+    mvprintw(20, (xMax/2) - 23/2, "-->ENTREE POUR JOUER<--");
+    mvprintw(22, (xMax/2) - 35/2, "(c) COMMANDE | (a) ABOUT | (q) EXIT");
+
+    while((choice =get_char()) != 'q') {
+        switch (choice) {
+            case 'c': 
+                affichage_titre();
+                mvprintw(12, 5, "Commande de mouvement :");
+                mvprintw(13, 7, "- Z : HAUT");
+                mvprintw(14, 7, "- Q : GAUCHE");
+                mvprintw(15, 7, "- S : BAS");
+                mvprintw(16, 7, "- D : DROITE");
+                mvprintw(18, 5, "Commande d'interaction':");
+                mvprintw(19, 7, "- I : Interagir avec certains objets.");
+                mvprintw(20, 7, "- E : Sortir de la cabane.");
+                mvprintw(20, 7, "- P : Inserer des pieces dans la cabane.");
+                break;
+            case 'a':
+                affichage_titre();
+                mvprintw(12, 5, "Bring Back Money !");
+                mvprintw(13, 5, "Recuperez un maximum de pieces avant de mourir");
+                mvprintw(14, 5, "interagissez avec un monde rempli de caracteres !");
+                mvprintw(15, 5, "Description : ");
+                mvprintw(16, 7, "- \'J\' : Le joueur qu il faut deplacer sur la carte.");
+                mvprintw(17, 7, "- \'O\' : Les pieces a collecter (collecte automatique).");
+                mvprintw(18, 7, "- \'C\' : Des coffres qui peuvent soit contenir soit des pieces, soit des pieges.");
+                mvprintw(19, 7, "- \'K\' : Des cles pour ouvrir les coffres.");
+                mvprintw(20, 7, "- \'G\' : De l herbe qui permet de se cacher d un monstre intelligent.");
+                mvprintw(21, 7, "- \'X\' : Un obstacle qui empêche la bonne circulation du joueur.");
+                mvprintw(22, 7, "- \'H\' : Le spot de depart du joueur. Le joueur peut stocker des pieces dans la ");
+                mvprintw(23,15,"cabane sans que les monstres puissent lui voler.");
+                break;
+            case 10:
+                Game();
+                break;
+
+        }
+        getch();
+    }
 }
 
