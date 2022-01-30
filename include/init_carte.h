@@ -180,11 +180,11 @@ void placement_joueur_cabane(char carte[SIZE_X][SIZE_X], s_player *Joueur) {
 
 void init_carte(char carte[SIZE_X][SIZE_Y], s_player *Joueur, s_monster TabMonstre[MAX_MONSTER]) { //fonction d'initialisation de carte
     remplissage_espace(carte);
-    //remplissage_buissons(carte);
-    //remplissage_obstacle(carte);
-    //remplissage_piece(carte);
-    //remplissage_coffre_cle(carte);
-    //placement_piege(carte);
+    remplissage_buissons(carte);
+    remplissage_obstacle(carte);
+    remplissage_piece(carte);
+    remplissage_coffre_cle(carte);
+    placement_piege(carte);
     placement_monstre(carte, TabMonstre);
     placement_joueur_cabane(carte, Joueur);
 }
