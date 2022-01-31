@@ -19,14 +19,19 @@ struct Squelette_Monster { //information Monstre
     char on_object;
 };
 
+struct Init_Settings { //Initialisation des settings
+    int difficulty;
+    int coord[100][100];
+};
+
 
 typedef struct Squelette_Player s_player;   //s_player diminutif de la structure
 typedef struct Squelette_Monster s_monster; //s_monster diminutif de la structure
-
+typedef struct Init_Settings i_settings;    //i_settings diminutif de la structure   
 
 void init_player(s_player *Joueur) {
     //Création du joueur
-    Joueur->life = 2;
+    Joueur->life = 5;
     Joueur->nb_key = 0;
     Joueur->coins = 0;
     Joueur->cabane_coins = 0;
