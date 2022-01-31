@@ -13,9 +13,15 @@ void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_m
         TableMonstre[i].pos_y = nb_random_y;
     }   while(carte[nb_random_y][nb_random_x] != ' ');
     carte[nb_random_y][nb_random_x] = TableMonstre[i].type + '0';
-    Joueur->life -= 1;
+    if(TableMonstre[i].type == 1 || TableMonstre[i].type == 2 || TableMonstre[i].type == 3 || TableMonstre[i].type == 4)
+        Joueur->life -= 1;
+    else {
+        if((Joueur->coins)>=1)
+            Joueur->coins -=1;
+        else
+            Joueur->life -=1;
+    }
 }
-
 
 void interaction_joueur_monstre(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
     for (int i = 0; i < TableMonstre[0].NbMonstre; i++) {
@@ -51,20 +57,19 @@ void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER]
     }
 }
 
-
-int * chemin_court(s_monster TableMonstre[MAX_MONSTER],s_player *Joueur, int i) {
+int * chemin_court(s_monster TableMonstre[MAX_MONSTER],s_player *Joueur, int i, int nb_case) {
     static int Coord[2];
     if(TableMonstre[i].pos_y <= Joueur->pos_y) {
-        Coord[0] = TableMonstre[i].pos_y + 1;
+        Coord[0] = TableMonstre[i].pos_y + nb_case;
     }
     if(TableMonstre[i].pos_y >= Joueur->pos_y) {
-        Coord[0] = TableMonstre[i].pos_y - 1;
+        Coord[0] = TableMonstre[i].pos_y - nb_case;
     }
     if(TableMonstre[i].pos_x <= Joueur->pos_x) {
-        Coord[1] = TableMonstre[i].pos_x + 1;
+        Coord[1] = TableMonstre[i].pos_x + nb_case;
     }
     if(TableMonstre[i].pos_x >= Joueur->pos_x) {
-        Coord[1] = TableMonstre[i].pos_x - 1;
+        Coord[1] = TableMonstre[i].pos_x - nb_case;
     }
     return Coord;
 }
@@ -74,29 +79,46 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
     int *Coord;
     for (int i = 0; i < TableMonstre[0].NbMonstre; i++) {
             switch (TableMonstre[i].type) {
-            case 2:
-                n_y = TableMonstre[i].pos_y + alea(-3,3);
-                n_x = TableMonstre[i].pos_x + alea(-3,3);
-                mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i);
-                break;
-            case 3:
-                if(Joueur->J_buissons == 1 || Joueur->J_cabane == 1) {
+                case 1: 
+                case 5:
                     n_y = TableMonstre[i].pos_y + alea(-1,1);
                     n_x = TableMonstre[i].pos_x + alea(-1,1);
-                    mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
-                }
-                else {
-                    Coord = chemin_court(TableMonstre,Joueur,i);
-                    n_y = *(Coord + 0);
-                    n_x = *(Coord + 1);
-                    mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
-                }
-                break;
-            default:
-                n_y = TableMonstre[i].pos_y + alea(-1,1);
-                n_x = TableMonstre[i].pos_x + alea(-1,1);
-                mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
-                break;
+                    mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i);
+                    break;
+                case 2:
+                case 6:
+                    n_y = TableMonstre[i].pos_y + alea(-3,3);
+                    n_x = TableMonstre[i].pos_x + alea(-3,3);
+                    mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i);
+                    break;
+                case 4:
+                case 8:
+                    if(Joueur->J_buissons == 1 || Joueur->J_cabane == 1) {
+                        n_y = TableMonstre[i].pos_y + alea(-3,3);
+                        n_x = TableMonstre[i].pos_x + alea(-3,3);
+                        mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
+                    }
+                    else {
+                        Coord = chemin_court(TableMonstre,Joueur,i,3);
+                        n_y = *(Coord + 0);
+                        n_x = *(Coord + 1);
+                        mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
+                    }
+                    break;
+                case 3:
+                case 7:
+                    if(Joueur->J_buissons == 1 || Joueur->J_cabane == 1) {
+                        n_y = TableMonstre[i].pos_y + alea(-1,1);
+                        n_x = TableMonstre[i].pos_x + alea(-1,1);
+                        mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
+                    }
+                    else {
+                        Coord = chemin_court(TableMonstre,Joueur,i,1);
+                        n_y = *(Coord + 0);
+                        n_x = *(Coord + 1);
+                        mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
+                    }
+                    break;
             }
     }
 }
