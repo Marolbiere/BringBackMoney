@@ -3,8 +3,6 @@
 #include <time.h>
 #include <curses.h>
 
-
-
 void bordures(int size_x) { //Affichage des bordures
     for (int a = 0; a < size_x + 2; a++) {
         if(a == 0)                printw("|");
