@@ -13,13 +13,10 @@ void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_m
         TableMonstre[i].pos_y = nb_random_y;
     }   while(carte[nb_random_y][nb_random_x] != ' ');
     carte[nb_random_y][nb_random_x] = TableMonstre[i].type + '0';
-    if(TableMonstre[i].type == 1 || TableMonstre[i].type == 2 || TableMonstre[i].type == 3 || TableMonstre[i].type == 4)
-        Joueur->life -= 1;
+    if((TableMonstre[i].type == 5 || TableMonstre[i].type == 6 || TableMonstre[i].type == 7 || TableMonstre[i].type == 8) && Joueur->coins>=1)
+        Joueur->coins -= 1;
     else {
-        if((Joueur->coins)>=1)
-            Joueur->coins -=1;
-        else
-            Joueur->life -=1;
+        Joueur->life -=1;
     }
 }
 
@@ -93,7 +90,7 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
                     break;
                 case 4:
                 case 8:
-                    if(Joueur->J_buissons == 1 || Joueur->J_cabane == 1) {
+                    if(Joueur->J_buissons == 1 /*|| Joueur->J_cabane == 1*/) {
                         n_y = TableMonstre[i].pos_y + alea(-3,3);
                         n_x = TableMonstre[i].pos_x + alea(-3,3);
                         mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
@@ -107,7 +104,7 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
                     break;
                 case 3:
                 case 7:
-                    if(Joueur->J_buissons == 1 || Joueur->J_cabane == 1) {
+                    if(Joueur->J_buissons == 1 /*|| Joueur->J_cabane == 1*/) {
                         n_y = TableMonstre[i].pos_y + alea(-1,1);
                         n_x = TableMonstre[i].pos_x + alea(-1,1);
                         mvt_Monstre(carte,TableMonstre,Joueur, n_y, n_x, i); 
@@ -166,16 +163,23 @@ void deplacement(char carte[SIZE_Y][SIZE_X], s_player *Joueur, int new_pos_y, in
         carte[Joueur->pos_y][Joueur->pos_x] = ' ';
         carte[new_pos_y][new_pos_x] = 'J';
     }
+    
     Joueur->pos_x = new_pos_x;
     Joueur->pos_y = new_pos_y;
+
 }
 
 void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][SIZE_Y], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
+    int r_y,r_x;
     switch (carte[new_pos_y][new_pos_x])
     {
-    //Cases où on peut passer dessus
     case 'O': //Pièce
         deplacement(carte,Joueur,new_pos_y,new_pos_x);
+        do {
+            r_y = alea(3,SIZE_Y);
+            r_x = alea(3,SIZE_X);
+        }while(carte[r_y][r_x] != ' ');
+        carte[r_y][r_x] = 'O'; //spawn infini de pièces
         Joueur->coins+=1;
         break;
     case 'G': //Buisson
@@ -197,7 +201,7 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         deplacement(carte,Joueur,new_pos_y,new_pos_x);
         break;
     case 'H':
-        interface_cabane(Joueur,TableMonstre, carte, new_pos_y, new_pos_x);
+        interface_cabane(Joueur, carte, new_pos_y, new_pos_x);
         break;
     case 'X': //Obstacle
         break;
@@ -214,10 +218,9 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
 }
 
 void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
-    char direction = get_char();
-
     int var_x = 0;
     int var_y = 0;
+    char direction = tolower(getch());
     //int var_interaction = 0;
     switch (direction) {
         case 'z': 
@@ -231,10 +234,11 @@ void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableM
             break;
         case 'd': if(Joueur->pos_x != SIZE_X - 1) {var_x = 1;} 
             break;
-        case 'i': 
-            break;
     }
-    int new_pos_x = Joueur->pos_x + var_x;
-    int new_pos_y = Joueur->pos_y + var_y;
-    interaction_environnement(new_pos_y,new_pos_x,carte,Joueur, TableMonstre);
+    
+    if(var_x != 0|| var_y != 0) {
+        int new_pos_x = Joueur->pos_x + var_x;
+        int new_pos_y = Joueur->pos_y + var_y;
+        interaction_environnement(new_pos_y,new_pos_x,carte,Joueur, TableMonstre);
+    }
 }
