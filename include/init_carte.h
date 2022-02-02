@@ -21,7 +21,6 @@ void remplissage_obstacle(char carte[SIZE_Y][SIZE_X]){
     int nb_obstacle = alea(4,SIZE_X - 3);
 
     //printw("Nombre d'obstacles : %d\n", nb_obstacle);
-
     for (int y = nb_random_y; y < SIZE_Y; y++)
     {
         for (int x = 0; x < SIZE_X; x++)
@@ -36,8 +35,8 @@ void remplissage_obstacle(char carte[SIZE_Y][SIZE_X]){
 
 void remplissage_buissons(char carte[SIZE_Y][SIZE_X]){
     RANDOMIZER_SEED;
-    int lg_buisson_x = alea(3,7);
-    int lg_buisson_y = alea(3,7);
+    int lg_buisson_x = alea(5,7);
+    int lg_buisson_y = alea(5,7);
     int nb_random_y = alea(0,SIZE_Y - 3);
     int nb_random_x = alea(0,SIZE_X - 3);
 
@@ -66,13 +65,9 @@ void remplissage_piece(char carte[SIZE_Y][SIZE_X]){
     int nb_random_x;
     int nb_piece = alea(10, SIZE_X);
     
-    //printw("Nombre de pieces : %d\n", nb_piece);
-
     while(nb_piece != 0) {
         for (int y = 0; y < SIZE_Y; y++) {
-            for (int x = 0; x < SIZE_X; x++) 
-            {
-                //nb_random_x = rand()%SIZE_X;
+            for (int x = 0; x < SIZE_X; x++) {
                 nb_random_x = alea(3,SIZE_X);
                 if (nb_random_x == x && nb_piece != 0 && carte[y][x] == ' ') {
                     carte[y][x] = 'O';
@@ -142,14 +137,18 @@ void placement_piege(char carte[SIZE_Y][SIZE_X]) {
 
 void placement_monstre(char carte[SIZE_X][SIZE_X], s_monster tabMonstre[MAX_MONSTER]) {
     RANDOMIZER_SEED;
-    int NbMonstre = 1;//alea(2,5);
+    int NbMonstre = alea(1,2);
     int TypeMonstre;
     int nb_random_x, nb_random_y;
 
     for (int i = 0; i < NbMonstre; i++) {
         nb_random_x = alea(2,18);
         nb_random_y = alea(2,18);
-        TypeMonstre = 7;//alea(1,8);
+        if((i)&&(tabMonstre[0].type == 7 || tabMonstre[0].type == 8))       TypeMonstre = alea(1,2);
+        else if((i)&&(tabMonstre[0].type == 3 || tabMonstre[0].type == 4))  TypeMonstre = alea(5,6);
+        else                                                                TypeMonstre = alea(1,8);
+
+
         while(carte[nb_random_y][nb_random_x] == ' '){
             tabMonstre[i].on_object = 0;
             tabMonstre[i].NbMonstre = NbMonstre;
@@ -165,10 +164,12 @@ void placement_joueur_cabane(char carte[SIZE_X][SIZE_X], s_player *Joueur) {
     RANDOMIZER_SEED;
     int nb_random_x = 0;
     int nb_random_y = 0;
-    int flag = 1;
-    while(carte[nb_random_y][nb_random_x] == 'X' || carte[nb_random_y][nb_random_x] == 'O' || carte[nb_random_y][nb_random_x] == 'G' || carte[nb_random_y][nb_random_x] == 'C' || carte[nb_random_y][nb_random_x] == 'P'|| carte[nb_random_y][nb_random_x] == 'K'|| flag == 1) {
+
+    do { 
         nb_random_x = alea(2,SIZE_X - 4);
         nb_random_y = alea(2,SIZE_Y - 4);
+    } while(carte[nb_random_y][nb_random_x] != ' ');
+        
         carte[nb_random_y][nb_random_x] = 'H';
         carte[nb_random_y][nb_random_x-1] = 'J';
         Joueur->pos_x = nb_random_x-1;
@@ -176,17 +177,17 @@ void placement_joueur_cabane(char carte[SIZE_X][SIZE_X], s_player *Joueur) {
         Joueur->poscab_y = nb_random_y;
         Joueur->poscab_x = nb_random_x;
 
-        flag = 0;
-    }
 }
 
 void init_carte(char carte[SIZE_X][SIZE_Y], s_player *Joueur, s_monster TabMonstre[MAX_MONSTER]) { //fonction d'initialisation de carte
     remplissage_espace(carte);
-    //remplissage_buissons(carte);
-    //remplissage_obstacle(carte);
+    remplissage_buissons(carte);
+    remplissage_obstacle(carte);
     remplissage_piece(carte);
-    //remplissage_coffre_cle(carte);
-    //placement_piege(carte);
+    remplissage_coffre_cle(carte);
+    placement_piege(carte);
+
+
     placement_monstre(carte, TabMonstre);
     placement_joueur_cabane(carte, Joueur);
 }
