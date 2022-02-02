@@ -40,24 +40,16 @@ void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
     bordures(SIZE_X);
  }
 
-void interface_joueur(s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
+void interface_joueur(s_player *Joueur) {
     //interface du joueur en dessous de la carte 
-    int temp;
-    for (int i = 0; i < TableMonstre[0].NbMonstre; i++){
-        mvprintw(i+1,60,"Monstre n%d sur Objet : %c",i, TableMonstre[i].on_object);
-        temp = i;
-    }
-    for (int j = 0; j < TableMonstre[0].NbMonstre; j++){
-        mvprintw(temp+1+j,60,"PosY Monstre n%d : %d, PosX Monstre n%d: %d", j, TableMonstre[j].pos_y, j, TableMonstre[j].pos_x);
-    }
-    move(24,0);
     printw("Life : %d/5\n",Joueur->life);
     printw("Money : %d\n",Joueur->coins);
     printw("Key : %d\n",Joueur->nb_key);
-    printw("Time Before the end :\n");
+    printw("Dans Buissons (1 : Oui / 0 : Non) : %d\n", Joueur->J_buissons);
+
 }
 
-void interface_cabane(s_player *Joueur,s_monster TableMonstre[MAX_MONSTER], char carte[SIZE_Y][SIZE_X], int new_pos_y, int new_pos_x) {
+void interface_cabane(s_player *Joueur, char carte[SIZE_Y][SIZE_X], int new_pos_y, int new_pos_x) {
 
     //Rentre le joueur dans la cabane
     carte[Joueur->pos_y][Joueur->pos_x] = ' ';
@@ -66,7 +58,7 @@ void interface_cabane(s_player *Joueur,s_monster TableMonstre[MAX_MONSTER], char
     clear();
     printw("====Bring Back Money=====\n\n");
     affichage_carte(carte);                  
-    interface_joueur(Joueur, TableMonstre);   
+    interface_joueur(Joueur);   
     
 
 
@@ -84,7 +76,7 @@ void interface_cabane(s_player *Joueur,s_monster TableMonstre[MAX_MONSTER], char
         mvprintw(12, 30,"Vous avez actuellement %d pieces dans votre cabane.", Joueur->cabane_coins);
         mvprintw(14, 30,"Appuyez sur 'e' pour quitter la cabane.");
         mvprintw(15, 30,"Appuyez sur 'p' pour ajouter des pieces.");
-        key = get_char();
+        key = tolower(getch());
         switch (key)
         {
         case 'p':   
