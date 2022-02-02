@@ -4,14 +4,14 @@
 #include <curses.h>
 #include <ctype.h>
 
-char get_char() { //Fonction global de relevé de caractère
+/*char get_char() { //Fonction global de relevé de caractère
     char C;
     while(1) {
         C = tolower(getch()); //récupérer uniquement en minuscule
         if(C == 'z' || C == 'q' || C == 's' || C == 'd' || C == 'i' || C == 'p' || C =='e' || C =='a' || C =='c' || C == 'r' || C == 10) 
             return C;
     }
-}
+}*/
 #define MAX_MONSTER 5
 #define MAX_SIZE_Y 100
 #define MAX_SIZE_X 100
@@ -51,7 +51,8 @@ void retour();
 void Menu();
 void Settings();
 void Game();
-void GameOver();
+void GameOver(s_player *Joueur);
+void Sauvegarde(s_player *Joueur);
 
 void affichage_titre() {
     clear();
@@ -72,7 +73,7 @@ void retour() {
     int yMax, xMax;
     getmaxyx(stdscr,yMax,xMax);
     mvprintw(yMax - 2, (xMax/2)-27/2, "Appuyez sur (r) pour sortir");
-    if(get_char() == 'r')  {
+    if(tolower(getch()) == 'r')  {
         Menu();
     }
 }
@@ -82,9 +83,9 @@ void Menu() {
     int xMax = getmaxx(stdscr);
     affichage_titre();
     mvprintw(20, (xMax/2) - 23/2, "-->ENTREE POUR JOUER<--");
-    mvprintw(22, (xMax/2) - 35/2, "(c) COMMANDE | (a) ABOUT | (q) EXIT");
+    mvprintw(22, (xMax/2) - 45/2, "(c) COMMANDE | (a) A PROPOS | (ECHAP) QUITTER");
 
-    while((choice = get_char()) != 'q') {
+    while((choice = tolower(getch())) != 27) {
         switch (choice) {
             case 'c': 
                 affichage_titre();
@@ -148,24 +149,33 @@ void Game() {
         clear();                                 //Clear le terminal
         printw("====Bring Back Money=====\n\n"); //titre
         affichage_carte(carte);                  //Fonction affichant la carte et ses bordures
-        interface_joueur(&Joueur, TabMonstre);               //Fonction affichant l'interface du joueur (Vie, pièces etc..)
+        interface_joueur(&Joueur);               //Fonction affichant l'interface du joueur (Vie, pièces etc..)
         input_player(carte, &Joueur, TabMonstre);            //Fonction d'évenement pour voir ou se déplace le joueur
         Type_Monstre(carte, TabMonstre, &Joueur);
     }
     //Direction l'affiche de GameOver
-    GameOver();
+    GameOver(&Joueur);
+}
+void Sauvegarde(s_player *Joueur) {
+    FILE * save; //pointeur de réference au fichier
+    save = fopen("main.save", "a");
+    fprintf(save, "%d\t\t%d\n", Joueur->life, Joueur->cabane_coins);
+    fclose(save);
+    if(getch() == 27) // appui sur la touche echap
+        endwin(); //Fermeture de la fenètre graphique
 }
 
-void GameOver() {
+void GameOver(s_player *Joueur) {
     char choice;
     int xMax = getmaxx(stdscr);
     affichage_titre();
     //getmaxyx(stdscr, xMax, yMax);
     mvprintw(15, (xMax/2) - 74/2, "Malheureusement les monstres sont arrives a leurs fin...");
     mvprintw(16, (xMax/2) - 74/2, "Neanmoins, jeune joueur, tu peux te relever, nous croyons en toi...");
-    if((choice = get_char()) != 10) {
+    if((choice = tolower(getch())) != 10) {
          mvprintw(17, (xMax/2) - 74/2, "Appuie sur ENTREE pour retourner au menu !");   
     }
+    Sauvegarde(Joueur);
     Menu();
 }
 
