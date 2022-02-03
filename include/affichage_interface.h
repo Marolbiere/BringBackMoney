@@ -40,8 +40,7 @@ void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
     bordures(SIZE_X);
  }
 
-void interface_joueur(s_player *Joueur) {
-    //interface du joueur en dessous de la carte 
+void interface_joueur(s_player *Joueur) { //interface du joueur en dessous de la carte 
     printw("Life : %d/5\n",Joueur->life);
     printw("Money : %d\n",Joueur->coins);
     printw("Key : %d\n",Joueur->nb_key);
@@ -50,8 +49,7 @@ void interface_joueur(s_player *Joueur) {
 }
 
 void interface_cabane(s_player *Joueur, char carte[SIZE_Y][SIZE_X], int new_pos_y, int new_pos_x) {
-
-    //Rentre le joueur dans la cabane
+    /*-----Rentre le joueur dans la cabane-----*/
     carte[Joueur->pos_y][Joueur->pos_x] = ' ';
     carte[new_pos_y][new_pos_x] = 'A';
     Joueur->J_cabane = 1;
@@ -59,25 +57,24 @@ void interface_cabane(s_player *Joueur, char carte[SIZE_Y][SIZE_X], int new_pos_
     printw("====Bring Back Money=====\n\n");
     affichage_carte(carte);                  
     interface_joueur(Joueur);   
-    
+    /*----------------------------------------*/
 
 
     //Affichage de l'interface cabane avec gestion de dépôt de pièces
     int flag_interface = 0;
-    //int flag_depot = 0;
     int temp_piece = 0;
     char key;
-    //clear();
     while(flag_interface!=1) {
         clrtoeol();
-        //nodelay(stdscr, TRUE); 
+        /*---------------------------Affichage des informations essentiels---------------------------*/
         mvprintw(10, 30,"Bienvenue dans votre interface cabane !");
         mvprintw(11, 30,"Vous avez actuellement %d pieces sur vous", Joueur->coins);
         mvprintw(12, 30,"Vous avez actuellement %d pieces dans votre cabane.", Joueur->cabane_coins);
         mvprintw(14, 30,"Appuyez sur 'e' pour quitter la cabane.");
         mvprintw(15, 30,"Appuyez sur 'p' pour ajouter des pieces.");
-        key = tolower(getch());
-        switch (key)
+        /*-------------------------------------------------------------------------------------------*/
+        key = tolower(getch()); //Récupère la touche pressée
+        switch (key) 
         {
         case 'p':   
             if((Joueur->coins)>0) {
