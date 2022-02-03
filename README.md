@@ -4,16 +4,17 @@
 
 ### A faire :
 
-- Finaliser l'apparation random de tout
-
-- Développer les monstres et leur déplacement
-
-- Passer au temps avec time.h au lieu du tour par tour
-
-- Faire le menu (check ce qu'on peut faire avec curses)
-
+- Finaliser et optimiser les monstres
+- Développer une page leaderboard
+- Optimiser le menu
 
 ### Finit :
+
+- Développer les monstres et leur déplacement :white_check_mark:
+
+- Faire le menu (check ce qu'on peut faire avec curses) :white_check_mark:
+
+- Finaliser l'apparation random de tout :white_check_mark:
 
 - Developper les pièges :white_check_mark:
 
