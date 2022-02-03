@@ -1,4 +1,5 @@
-struct Squelette_Player { //Information du joueur
+//Structure pour un Joueur
+struct Squelette_Player { 
     int life;
     int nb_key;
     int pos_x;
@@ -11,7 +12,8 @@ struct Squelette_Player { //Information du joueur
     int J_cabane;
 };
 
-struct Squelette_Monster { //information Monstre
+//Structure pour un Monstre
+struct Squelette_Monster {
     int pos_x;
     int pos_y;
     int type;
@@ -24,13 +26,13 @@ struct Init_Settings { //Initialisation des settings
     int coord[100][100];
 };
 
+/*------------Diminutif des structures------------*/
+typedef struct Squelette_Player  s_player;      
+typedef struct Squelette_Monster s_monster;   
+typedef struct Init_Settings     i_settings;    
+/*------------------------------------------------*/
 
-typedef struct Squelette_Player s_player;   //s_player diminutif de la structure
-typedef struct Squelette_Monster s_monster; //s_monster diminutif de la structure
-typedef struct Init_Settings i_settings;    //i_settings diminutif de la structure   
-
-void init_player(s_player *Joueur) {
-    //Création du joueur
+void init_player(s_player *Joueur) { //Initialisation des variables du Joueur
     Joueur->life = 5;
     Joueur->nb_key = 0;
     Joueur->coins = 0;
