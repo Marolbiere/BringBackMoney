@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <curses.h>
+#include <string.h>
 
 void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_monster TableMonstre[MAX_MONSTER], int i) {
     //Interaction entre monstre et Joueur
@@ -18,6 +19,7 @@ void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_m
     else {
         Joueur->life -=1;
     }
+    Joueur->mess = strdup("Oh non un monstre vous a attaque!");
 }
 
 void interaction_joueur_monstre(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
@@ -181,24 +183,31 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         }while(carte[r_y][r_x] != ' ');
         carte[r_y][r_x] = 'O'; //spawn infini de pièces
         Joueur->coins+=1;
+        Joueur->mess = strdup("Vous avez recuperer une piece !");
+
         break;
     case 'G': //Buisson
         deplacement(carte,Joueur,new_pos_y,new_pos_x);
         Joueur->J_buissons = 1;
+        Joueur->mess = strdup("");
         break;
     case 'C': //Coffre
         if(Joueur->nb_key>=1) {
             //RANDOMIZER_SEED;
             int p_or_c = rand()%SIZE_X;
-            if(p_or_c %2 == 0) { Joueur->coins += 1;}
-            else               { trap(carte,Joueur,new_pos_y,new_pos_x); }
+            if(p_or_c %2 == 0) { Joueur->coins += 1; Joueur->mess = strdup("Le coffre renfermaé une piece");}
+            else               { trap(carte,Joueur,new_pos_y,new_pos_x); Joueur->mess = strdup("Le coffre était un piege !");}
             deplacement(carte,Joueur,new_pos_y,new_pos_x);
             Joueur-> nb_key -=1;
+        }
+        else {
+            Joueur->mess = strdup("Il vous faut une cle pour ouvrir ce coffre");
         }
         break;
     case 'K': //Clé
         Joueur->nb_key+=1;
         deplacement(carte,Joueur,new_pos_y,new_pos_x);
+        Joueur->mess = strdup("Vous avez ramasser une cle !");
         break;
     case 'H':
         interface_cabane(Joueur, carte, new_pos_y, new_pos_x);
@@ -207,12 +216,15 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         break;
     case 'P': //Piège
         trap(carte,Joueur,new_pos_y,new_pos_x);
+        Joueur->mess = strdup("Oh non un piege mince !");
         break;
     case '1'||'2'||'3'||'4'||'5'||'6'||'7'||'8':
         interaction_joueur_monstre(carte,Joueur,TableMonstre);
+        //Joueur->mess = strdup("Oh non un monstre vous a attaque!");
     //Cases de bases (espace)
     default:
         deplacement(carte,Joueur,new_pos_y,new_pos_x);
+        Joueur->mess = strdup("");
         break;
     }
 }
