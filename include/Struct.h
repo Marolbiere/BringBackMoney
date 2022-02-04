@@ -1,3 +1,4 @@
+
 //Structure pour un Joueur
 struct Squelette_Player { 
     int life;
@@ -10,6 +11,7 @@ struct Squelette_Player {
     int cabane_coins;
     int J_buissons;
     int J_cabane;
+    char *mess;
 };
 
 //Structure pour un Monstre
@@ -33,6 +35,7 @@ typedef struct Init_Settings     i_settings;
 /*------------------------------------------------*/
 
 void init_player(s_player *Joueur) { //Initialisation des variables du Joueur
+    Joueur->mess = "";
     Joueur->life = 5;
     Joueur->nb_key = 0;
     Joueur->coins = 0;
