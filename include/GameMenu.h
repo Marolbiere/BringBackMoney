@@ -10,7 +10,7 @@ void Menu();
 void Settings();
 void Game();
 void GameOver(s_player *Joueur);
-void Sauvegarde(s_player *Joueur,char username[20];);
+void Sauvegarde(s_player *Joueur,char username[20]);
 
 
 void retour() {
