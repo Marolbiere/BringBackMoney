@@ -101,7 +101,7 @@ void Game() {
 }
 void Sauvegarde(s_player *Joueur, char username[20]) {
     FILE * save; //pointeur de réference au fichier
-    save = fopen("main.save", "a");
+    save = fopen("src/main.save", "a");
     fprintf(save, "%s\t\t%d\n", username, Joueur->cabane_coins);
     fclose(save);
     if(getch() == 27) // appui sur la touche echap
