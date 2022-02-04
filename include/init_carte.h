@@ -3,9 +3,6 @@
 #include <time.h>
 #include <curses.h>
 
-#define SIZE_X 20
-#define SIZE_Y 20
-
 void remplissage_espace(char carte[SIZE_Y][SIZE_X]){
     for (int y = 0; y < SIZE_Y; y++)
     {
