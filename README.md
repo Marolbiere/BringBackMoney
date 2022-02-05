@@ -7,7 +7,7 @@ Le but est de ramasser le plus de pièces tant que c’est possible, car des pi�
 Cachez-vous dans les buissons et certains monstres ne vous poursuivront plus. N'oubliez pas aussi de passer par votre cabane afin d’y déposer un maximum de pièces.   
   
 
-Si vous finissez par perdre tous vos points de vie, le jeu s’arrête, vous demande votre nom d’aventurier et sauvegarde votre score afin final
+Si vous finissez par perdre tous vos points de vie, le jeu s’arrête, vous demande votre nom d’aventurier et sauvegarde votre score final
 
 ## Compilation
 Il n'y a pas encore de Makefile pour compiler automatiquement le projet
