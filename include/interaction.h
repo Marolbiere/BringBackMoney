@@ -195,8 +195,8 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         if(Joueur->nb_key>=1) {
             //RANDOMIZER_SEED;
             int p_or_c = rand()%SIZE_X;
-            if(p_or_c %2 == 0) { Joueur->coins += 1; Joueur->mess = strdup("Le coffre renfermaé une piece");}
-            else               { trap(carte,Joueur,new_pos_y,new_pos_x); Joueur->mess = strdup("Le coffre était un piege !");}
+            if(p_or_c %2 == 0) { Joueur->coins += 1; Joueur->mess = strdup("Le coffre renferme une piece");}
+            else               { trap(carte,Joueur,new_pos_y,new_pos_x); Joueur->mess = strdup("Le coffre etait un piege !");}
             deplacement(carte,Joueur,new_pos_y,new_pos_x);
             Joueur-> nb_key -=1;
         }
