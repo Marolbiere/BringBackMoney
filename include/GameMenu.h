@@ -28,6 +28,7 @@ void Menu() {
     affichage_titre();
     mvprintw(20, (xMax/2) - 23/2, "-->ENTREE POUR JOUER<--");
     mvprintw(22, (xMax/2) - 45/2, "(c) COMMANDE | (a) A PROPOS | (ECHAP) QUITTER");
+    mvprintw(27, (xMax/2) - 28/2, "v1.0.0       Simon Marolleau");
 
     while((choice = tolower(getch())) != 27) {
         switch (choice) {
