@@ -143,7 +143,7 @@ void placement_monstre(char carte[SIZE_X][SIZE_X], s_monster tabMonstre[MAX_MONS
         nb_random_y = alea(2,18);
         if((i)&&(tabMonstre[0].type == 7 || tabMonstre[0].type == 8))       TypeMonstre = alea(1,2);
         else if((i)&&(tabMonstre[0].type == 3 || tabMonstre[0].type == 4))  TypeMonstre = alea(5,6);
-        else                                                                TypeMonstre = alea(1,8);
+        else                                                                TypeMonstre = 3;//alea(1,8);
 
         
         do {
@@ -157,14 +157,6 @@ void placement_monstre(char carte[SIZE_X][SIZE_X], s_monster tabMonstre[MAX_MONS
         tabMonstre[i].pos_y = nb_random_y;
         carte[nb_random_y][nb_random_x] = TypeMonstre + '0'; //Affichage ASCII de son Type (Exemple : 1 + '0' = '1')
         
-        /*while(carte[nb_random_y][nb_random_x] == ' '){
-            tabMonstre[i].on_object = 0;
-            tabMonstre[i].NbMonstre = NbMonstre;
-            tabMonstre[i].type = TypeMonstre;
-            tabMonstre[i].pos_x = nb_random_x;
-            tabMonstre[i].pos_y = nb_random_y;
-            carte[nb_random_y][nb_random_x] = TypeMonstre + '0'; //Affichage ASCII de son Type (Exemple : 1 + '0' = '1')
-        }*/
     }
 }
 

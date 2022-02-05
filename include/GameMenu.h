@@ -56,7 +56,7 @@ void Menu() {
                 mvprintw(18, 7, "- \'C\' : Des coffres qui peuvent soit contenir soit des pieces, soit des pieges.");
                 mvprintw(19, 7, "- \'K\' : Des cles pour ouvrir les coffres.");
                 mvprintw(20, 7, "- \'G\' : De l herbe qui permet de se cacher d un monstre intelligent.");
-                mvprintw(21, 7, "- \'X\' : Un obstacle qui empêche la bonne circulation du joueur.");
+                mvprintw(21, 7, "- \'X\' : Un obstacle qui empeche la bonne circulation du joueur.");
                 mvprintw(22, 7, "- \'H\' : Le spot de depart du joueur. Le joueur peut stocker des pieces dans la ");
                 mvprintw(23,15,"cabane sans que les monstres puissent lui voler.");
                 retour();
