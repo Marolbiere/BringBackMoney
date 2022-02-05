@@ -34,19 +34,19 @@ void affichage_carte(char carte[SIZE_X][SIZE_Y]){ //affichage de la carte
         for (int j = 0; j < SIZE_X; j++) {
             
             if (j == SIZE_X - 1) {
-                if(carte[i][j] == 'P')
+                if(carte[i][j] == 'P') //affiche des espace pour cacher les pièges
                     printw(" |\n");
                 else
                     printw("%c|\n", carte[i][j]);
             }
             else if(j == 0)  {       
-                if(carte[i][j] == 'P')   
+                if(carte[i][j] == 'P')  //affiche des espace pour cacher les pièges
                     printw("| ");
                 else
                     printw("\t\t\t\t\t|%c", carte[i][j]);
             }
             else { 
-                if(carte[i][j] == 'P') 
+                if(carte[i][j] == 'P') //affiche des espace pour cacher les pièges
                     printw(" ");
                 else
                     printw("%c", carte[i][j]);
@@ -96,7 +96,7 @@ void interface_cabane(s_player *Joueur, char carte[SIZE_Y][SIZE_X], int new_pos_
         {
         case 'p':   
             if((Joueur->coins)>0) {
-                echo();
+                echo(); //permet la vision de ce qu'on écrit
                 mvprintw(17, po_x,"Combien de pieces voulez vous deposer ? : ");
                 wscanw(stdscr,"%d", &temp_piece);
                 noecho();

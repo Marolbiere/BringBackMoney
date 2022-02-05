@@ -19,10 +19,12 @@ void interaction_monstre_joueur(char carte[SIZE_Y][SIZE_X],s_player *Joueur, s_m
     else {
         Joueur->life -=1;
     }
+    //message d'interaction
     Joueur->mess = strdup("Oh non un monstre vous a attaque!");
 }
 
 void interaction_joueur_monstre(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableMonstre[MAX_MONSTER]) {
+    //vérifie si les coordonnées si oui renvoie à l'interaction au dessus avec le bonne indice
     for (int i = 0; i < TableMonstre[0].NbMonstre; i++) {
         if(Joueur->pos_y==TableMonstre[i].pos_y && Joueur->pos_x==TableMonstre[i].pos_x) {
             interaction_monstre_joueur(carte,Joueur,TableMonstre,i);
@@ -57,6 +59,7 @@ void mvt_Monstre(char carte[SIZE_Y][SIZE_X], s_monster TableMonstre[MAX_MONSTER]
 }
 
 int * chemin_court(s_monster TableMonstre[MAX_MONSTER],s_player *Joueur, int i, int nb_case) {
+    //Fonction chemin le plus cours, bientôt en récursif j'espère ;_;
     static int Coord[2];
     if(TableMonstre[i].pos_y <= Joueur->pos_y) {
         Coord[0] = TableMonstre[i].pos_y + nb_case;
@@ -78,6 +81,7 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
     int *Coord;
     for (int i = 0; i < TableMonstre[0].NbMonstre; i++) {
             switch (TableMonstre[i].type) {
+                //répertoire de tous les types de monstres possibles et leurs mouvement
                 case 1: 
                 case 5:
                     n_y = TableMonstre[i].pos_y + alea(-1,1);
@@ -123,6 +127,7 @@ void Type_Monstre(char carte[SIZE_Y][SIZE_Y], s_monster TableMonstre[MAX_MONSTER
 }
 
 void trap(char carte[SIZE_Y][SIZE_X], s_player *Joueur,int new_pos_y, int new_pos_x) {
+    //fonctions réalisant l'aléatoire des trap
     RANDOMIZER_SEED;
     int type_trap = alea(1,3);
     int r_y = alea(2,18);
@@ -183,6 +188,7 @@ void interaction_environnement(int new_pos_y, int new_pos_x, char carte[SIZE_X][
         }while(carte[r_y][r_x] != ' ');
         carte[r_y][r_x] = 'O'; //spawn infini de pièces
         Joueur->coins+=1;
+        //message d'interaction
         Joueur->mess = strdup("Vous avez recuperer une piece !");
 
         break;
@@ -248,7 +254,7 @@ void input_player(char carte[SIZE_Y][SIZE_X], s_player *Joueur, s_monster TableM
             break;
     }
     
-    if(var_x != 0|| var_y != 0) {
+    if(var_x != 0 || var_y != 0) { //Si on ne bouge pas on fait rien
         int new_pos_x = Joueur->pos_x + var_x;
         int new_pos_y = Joueur->pos_y + var_y;
         interaction_environnement(new_pos_y,new_pos_x,carte,Joueur, TableMonstre);

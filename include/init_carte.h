@@ -61,7 +61,7 @@ void remplissage_piece(char carte[SIZE_Y][SIZE_X]){
     RANDOMIZER_SEED;
     int nb_random_x;
     int nb_piece = alea(10, SIZE_X);
-    
+    //on parcours la carte tant que on a pas palcer toutes les pièces
     while(nb_piece != 0) {
         for (int y = 0; y < SIZE_Y; y++) {
             for (int x = 0; x < SIZE_X; x++) {
@@ -82,7 +82,7 @@ void remplissage_coffre_cle(char carte[SIZE_Y][SIZE_X]) {
 
     int nb_key = nb_coffre;
     //printw("Nombre de coffre : %d\n", nb_coffre);
-
+    //on parcours la carte tant que on a pas palcer tout les coffres
     while(nb_coffre != 0) {
         for (int y = 0; y < SIZE_Y; y++) {
             for (int x = 0; x < SIZE_X; x++) {
@@ -94,7 +94,7 @@ void remplissage_coffre_cle(char carte[SIZE_Y][SIZE_X]) {
             }
         }
     }
-
+    //on parcours la carte tant que on a pas palcer toutes les clés
     while(nb_key!=0) {
         for (int y = 0; y < SIZE_Y; y++)
         {
@@ -116,7 +116,7 @@ void placement_piege(char carte[SIZE_Y][SIZE_X]) {
     int nb_random_x;
     int nb_piege = alea(2,5);
     printw("Nombre de piege : %d\n", nb_piege);
-
+    //on parcours la carte tant que on a pas palcer tout les pièges
     while (nb_piege != 0) {
         for (int y = 0; y < SIZE_Y; y++)
         {
@@ -143,10 +143,10 @@ void placement_monstre(char carte[SIZE_X][SIZE_X], s_monster tabMonstre[MAX_MONS
         nb_random_y = alea(2,18);
         if((i)&&(tabMonstre[0].type == 7 || tabMonstre[0].type == 8))       TypeMonstre = alea(1,2);
         else if((i)&&(tabMonstre[0].type == 3 || tabMonstre[0].type == 4))  TypeMonstre = alea(5,6);
-        else                                                                TypeMonstre = 3;//alea(1,8);
+        else                                                                TypeMonstre = alea(1,8);
 
         
-        do {
+        do { //on random tant que les coordonnées ne correspondent pas à un espace
             nb_random_x = alea(2,18);
             nb_random_y = alea(2,18);
         } while(carte[nb_random_y][nb_random_x] != ' ');
@@ -165,7 +165,7 @@ void placement_joueur_cabane(char carte[SIZE_X][SIZE_X], s_player *Joueur) {
     int nb_random_x = 0;
     int nb_random_y = 0;
 
-    do { 
+    do { //on random tant que les coordonnées ne correspondent pas à un espace
         nb_random_x = alea(2,SIZE_X - 4);
         nb_random_y = alea(2,SIZE_Y - 4);
     } while(carte[nb_random_y][nb_random_x] != ' ');
@@ -180,7 +180,8 @@ void placement_joueur_cabane(char carte[SIZE_X][SIZE_X], s_player *Joueur) {
 }
 
 void init_carte(char carte[SIZE_X][SIZE_Y], s_player *Joueur, s_monster TabMonstre[MAX_MONSTER]) { //fonction d'initialisation de carte
-    remplissage_espace(carte);
+    //affiche les éléments dans l'ordre des fonctions
+    remplissage_espace(carte); 
     remplissage_buissons(carte);
     remplissage_obstacle(carte);
     remplissage_piece(carte);

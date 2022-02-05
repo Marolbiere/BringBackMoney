@@ -4,16 +4,16 @@
 #include <curses.h>
 #include <ctype.h>
 
-
+/*----------------Déclaration des fonction----------------*/
 void retour();
 void Menu();
 void Settings();
 void Game();
 void GameOver(s_player *Joueur);
 void Sauvegarde(s_player *Joueur,char username[20]);
+/*--------------------------------------------------------*/
 
-
-void retour() {
+void retour() { //Fonction permettant le retour de chaque pages
     int yMax, xMax;
     getmaxyx(stdscr,yMax,xMax);
     mvprintw(yMax - 2, (xMax/2)-27/2, "Appuyez sur (r) pour sortir");
@@ -22,7 +22,7 @@ void retour() {
     }
 }
 
-void Menu() {
+void Menu() { //Fonction affichant le menu principal
     char choice;
     int xMax = getmaxx(stdscr);
     affichage_titre();
@@ -30,6 +30,7 @@ void Menu() {
     mvprintw(22, (xMax/2) - 45/2, "(c) COMMANDE | (a) A PROPOS | (ECHAP) QUITTER");
     mvprintw(27, (xMax/2) - 28/2, "v1.0.0       Simon Marolleau");
 
+    //Affiche le menu tant qu'on appuie pas sur echap
     while((choice = tolower(getch())) != 27) {
         switch (choice) {
             case 'c': 
@@ -113,10 +114,9 @@ void GameOver(s_player *Joueur) {
     int xMax = getmaxx(stdscr);
     char username[20];
     affichage_titre();
-    //getmaxyx(stdscr, xMax, yMax);
     mvprintw(15, (xMax/2) - 74/2, "Malheureusement les monstres sont arrives a leurs fin...");
     mvprintw(16, (xMax/2) - 74/2, "Neanmoins, jeune joueur, tu peux te relever, nous croyons en toi...");
-    echo();
+    echo(); //permet la vision de ce qu'on écrit
     mvprintw(17, (xMax/2) - 74/2, "Quel est ton nom pour que les anciens se souviennent de toi hero ?"); 
     move(18,(xMax/2) - 10);
     wscanw(stdscr,"%s", username);
